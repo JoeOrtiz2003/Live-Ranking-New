@@ -98,7 +98,6 @@ body {
 
 .rankingHeader > p {
   font-size: 18px;
-  font-weight: bold;
   margin: 0;
   text-align: center;
   font-family: "Anton-Regular";
@@ -108,7 +107,7 @@ body {
 .rankingElementRank {
   flex: 0 0 35px;
   text-align: center;
-  padding-left: 10px;
+  padding-left: 12px;
 }
 
 #rankingHeaderTeam,
