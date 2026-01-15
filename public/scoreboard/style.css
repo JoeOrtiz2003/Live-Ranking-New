@@ -149,7 +149,7 @@ body {
     display: flex;
     width: 873px;
     height: 66px;
-    gap: 10px;
+    gap: 0px;
     align-items: center;
     justify-content: space-between;
 }
@@ -157,7 +157,7 @@ body {
 .teamBraket > div {
     display: flex;
     height: 66px;
-    padding: 3px;
+    padding: 9px;
     align-items: center;
     color: var(--braket-primary-color);
 }
@@ -214,8 +214,8 @@ body {
 
 .teamLogo {
     vertical-align: middle;
-    width: 53px;
-    height: 53px;
+    width: 55px;
+    height: 55px;
     object-fit: cover;
 }
 
