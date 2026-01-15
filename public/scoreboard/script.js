@@ -19,7 +19,7 @@ async function fetchAndDisplayData() {
         const leftGrouping = document.getElementById('leftGrouping');
         const rightGrouping = document.getElementById('rightGrouping');
 
-        // Only update DOM if data has changed
+        // Only update DOM if data has change
         let dataChanged = false;
         const newLeft = [];
         const newRight = [];
