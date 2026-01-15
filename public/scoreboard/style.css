@@ -11,24 +11,52 @@
     --svg-color: white; /* Color Chicken */
 }
 
+@font-face {
+  font-family: "Anton-Regular";
+  src: url("./fonts/Anton-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("./fonts/Roboto-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Oswald-SemiBold";
+  src: url("./fonts/Oswald-SemiBold.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Oswald-Regular";
+  src: url("./fonts/Oswald-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
 body {
     margin: 0;
     font-family: var(--secondary-font);
-    background-color: #f4f4f4;
+    background-color: transparent;
 }
 
 .teamName {
-    font-weight: 100;
+    font-weight: 80;
     color: var(--braket-primary-color);
     text-align: left;
     max-inline-size: 150px; /* limits max width in a writing-mode-aware way */
     width: 100%;
     line-height: 1.2;
-    font-size: 0.5px;
     padding: 0;
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
+    font-family: 'Oswald-Regular';
 }
 
 #eventHeadlingText {
@@ -74,11 +102,13 @@ body {
 }
 
 .braketHeader > div > p {
-    line-height: 25px;
-    font-size: 18px;
-    font-weight: 700;
+    line-height: 21px;
+    font-size: 20px;
+    font-weight: 450;
     margin: 0;
     padding: 0;
+    font-family: 'Oswald-SemiBold';
+    text-transform: uppercase;
 }
 
 .braketHeader > .braketHeaderRank {
@@ -133,7 +163,7 @@ body {
 }
 
 .teamBraket p {
-    font-size: 18.1px;
+    font-size: 18px;
     margin: 0;
 }
 
@@ -165,6 +195,7 @@ body {
     text-align: center;
     line-height: 30px;
     font-size: 30px;
+    font-family: 'Oswald-SemiBold';
 }
 
 .teamLogoWrapper {
@@ -229,6 +260,7 @@ body {
     text-align: center;
     line-height: 20px;
     margin: 0;
+    font-family: 'Oswald-Regular';
 }
 
 .teamTotalWrapper {
