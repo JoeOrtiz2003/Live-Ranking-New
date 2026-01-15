@@ -185,25 +185,12 @@
       '↑  — Scroll Up\n' +
       '↓  — Scroll Down'
     ));
-    // Prevent browser key repeat delay for ArrowUp/ArrowDown
-    let lastScrollDir = null;
+    // Optimize: trigger scroll instantly on every keydown (including repeats)
     window.addEventListener('keydown',e=>{
-      if(e.repeat && (e.key==='ArrowUp'||e.key==='ArrowDown')){
-        // Allow rapid repeat
-        scrollControl(e.key==='ArrowUp'?'up':'down');
-        return;
-      }
       if(e.key==='s') sendAction('show');
       if(e.key==='h') sendAction('hide');
-      if(e.key==='ArrowUp') {
-        if(lastScrollDir!=='up'){ scrollControl('up'); lastScrollDir='up'; }
-      }
-      if(e.key==='ArrowDown') {
-        if(lastScrollDir!=='down'){ scrollControl('down'); lastScrollDir='down'; }
-      }
-    });
-    window.addEventListener('keyup',e=>{
-      if(e.key==='ArrowUp'||e.key==='ArrowDown') lastScrollDir=null;
+      if(e.key==='ArrowUp') scrollControl('up');
+      if(e.key==='ArrowDown') scrollControl('down');
     });
   </script>
 
