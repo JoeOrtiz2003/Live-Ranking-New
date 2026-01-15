@@ -8,7 +8,7 @@ let controlState = { action: "show", timestamp: Date.now() };
 let wwcdGame = "Game 1"; // default
 let killsGame = "Game 1"; // default
 let matchRankingGame = "Game 1"; // default
-let scrollDirection = null; // Add this line
+let scrollQueue = []; // Use a queue for scroll directions
 
 app.use(cors());
 app.use(express.json());
@@ -16,9 +16,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Get current state
 app.get('/api/control', (req, res) => {
-  res.json({ ...controlState, wwcdGame, killsGame, matchRankingGame, scrollDirection });
-  // Only clear scrollDirection, not the whole state
-  scrollDirection = null;
+  // Return the next scroll direction in the queue, if any
+  const nextScroll = scrollQueue.length > 0 ? scrollQueue.shift() : null;
+  res.json({ ...controlState, wwcdGame, killsGame, matchRankingGame, scrollDirection: nextScroll });
 });
 
 // Set new state
@@ -39,8 +39,8 @@ app.post('/api/control', (req, res) => {
     matchRankingGame = game;
     controlState = { action, game, timestamp: Date.now() };
     res.json({ success: true });
-  } else if (action === "scroll" && direction) { // Add this block
-    scrollDirection = direction;
+  } else if (action === "scroll" && direction) {
+    scrollQueue.push(direction); // Add to queue
     res.json({ success: true });
   } else {
     res.status(400).json({ error: "Invalid action" });
