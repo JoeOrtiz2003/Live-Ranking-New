@@ -21,6 +21,9 @@
       background:var(--bg);
       color:var(--muted);
       padding:28px;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
       -webkit-font-smoothing:antialiased;
     }
     .topbar{
@@ -37,20 +40,28 @@
       display:grid;
       grid-template-columns:repeat(2,minmax(280px,1fr));
       gap:18px;
-      min-height:60vh;
+      flex:1 1 auto;
       align-items:stretch;
+      grid-template-rows: auto auto auto auto 1fr auto;
+      min-height:0;
     }
     .card{background:var(--panel);padding:18px;border-radius:var(--radius);box-shadow:0 6px 18px rgba(3,12,26,0.5);border:1px solid rgba(255,255,255,0.03)}
     .card h2{margin:0 0 12px;font-size:1rem;color:var(--accent);display:flex;align-items:center;gap:8px}
     .controls{display:flex;gap:8px;flex-wrap:wrap}
     select, .btn{width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(10,18,30,0.6);color:var(--muted);font-weight:600}
+    .scroll-controls .btn.primary { padding: 30px 0; }
     .row{display:flex;gap:10px}
     .row .half{flex:1}
     .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#002233;border:none}
     .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
     .active-flash{box-shadow:0 0 0 3px var(--accent-2),0 2px 8px var(--accent);transition:box-shadow 0.1s;}
     .muted{font-size:0.85rem;color:#9fc9da}
-    .scroll-controls{grid-column:1 / -1;display:flex;gap:10px}
+    .scroll-controls{
+      grid-column:1 / -1;
+      display:flex;
+      gap:10px;
+      margin-top:auto;
+    }
     .small{font-size:0.9rem;padding:8px 10px}
     /* compact for OBS use */
     body.compact{padding:8px}
@@ -133,7 +144,7 @@
     <div class="card scroll-controls">
       <button class="btn primary" onclick="scrollControl('up')">▲ Scroll Up</button>
       <button class="btn primary" onclick="scrollControl('down')">▼ Scroll Down</button>
-      <button class="btn ghost" onclick="sendAction('reset')">Reset</button>
+      <button class="btn ghost" onclick="sendAction('reset')" title="Reset overlays or scroll position (if implemented)">Reset</button>
     </div>
 
   </main>
