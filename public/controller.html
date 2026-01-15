@@ -27,7 +27,7 @@
       max-width:1200px;margin:0 auto 20px;display:flex;align-items:center;gap:12px;
     }
     .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:inline-grid;place-items:center;border-radius:10px;color:#042233;font-weight:800}
+    .logo{width:44px;height:44px;display:inline-grid;place-items:center;border-radius:10px;overflow:hidden;background:none;padding:0;}
     .title{font-size:1.15rem;font-weight:800;color:var(--accent)}
     .toolbar{display:flex;align-items:center;gap:8px}
     .toolbar button{background:transparent;border:1px solid var(--glass);color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer}
@@ -68,7 +68,7 @@
 
   <div class="topbar">
     <div class="brand">
-      <div class="logo">LR</div>
+      <div class="logo"><img src="logo.png" alt="Logo" style="width:44px;height:44px;object-fit:contain;display:block;" /></div>
       <div>
         <div class="title">Live Ranking Controller</div>
         <div class="muted">Control overlays, scoring and quick presets</div>
