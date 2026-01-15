@@ -2,243 +2,178 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Leaderboard Controller</title>
-
   <style>
-    /* =====================
-       THEME VARIABLES
-    ====================== */
-    :root {
-      --bg-main: linear-gradient(135deg, #0f2027, #2c5364);
-      --card-bg: rgba(24, 40, 72, 0.97);
+    :root{
+      --bg: linear-gradient(135deg,#071426 0%,#0f3050 100%);
+      --panel: rgba(10,22,38,0.7);
       --accent: #4fd2ff;
-      --accent-dark: #1976d2;
-      --text-main: #e0f7fa;
-      --radius: 18px;
+      --accent-2: #1976d2;
+      --glass: rgba(255,255,255,0.04);
+      --muted: #bcdfe9;
+      --radius: 14px;
     }
-
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      margin: 0;
-      padding: 32px;
-      min-height: 100vh;
-      background: var(--bg-main);
-      color: var(--text-main);
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--muted);
+      padding:28px;
+      -webkit-font-smoothing:antialiased;
     }
-
-    /* =====================
-       GRID LAYOUT
-    ====================== */
-    .controller-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(320px, 1fr));
-      gap: 32px;
-      max-width: 1200px;
-      margin: auto;
+    .topbar{
+      max-width:1200px;margin:0 auto 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;
     }
-
-    /* =====================
-       SECTIONS
-    ====================== */
-    .section {
-      background: var(--card-bg);
-      padding: 28px 32px;
-      border-radius: var(--radius);
-      box-shadow: 0 6px 24px rgba(0, 40, 80, 0.25);
-    }
-
-    h1 {
-      margin: 0 0 20px;
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--accent);
-      letter-spacing: 1px;
-    }
-
-    /* =====================
-       CONTROLS
-    ====================== */
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    button {
-      padding: 14px 28px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      color: #fff;
-      background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-      transition: transform 0.15s ease, background 0.2s;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      background: linear-gradient(90deg, var(--accent-dark), var(--accent));
-    }
-
-    select {
-      padding: 12px 18px;
-      font-size: 1.05rem;
-      border-radius: 8px;
-      border: 2px solid var(--accent);
-      background: #183050;
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    /* =====================
-       SCROLL BUTTONS
-    ====================== */
-    .scroll-controls {
-      grid-column: span 2;
-      display: flex;
-      gap: 12px;
-    }
-
-    .scroll-controls button {
-      flex: 1;
-    }
-
-    /* =====================
-       COMPACT MODE (OBS)
-    ====================== */
-    body.compact {
-      padding: 16px;
-      background: #0f2027;
-    }
-
-    body.compact h1 {
-      font-size: 1.1rem;
-      margin-bottom: 12px;
-    }
-
-    body.compact .section {
-      padding: 16px;
-      box-shadow: none;
-      border-radius: 12px;
-    }
-
-    body.compact button,
-    body.compact select {
-      font-size: 0.9rem;
-      padding: 10px 14px;
-    }
-
-    /* =====================
-       RESPONSIVE
-    ====================== */
-    @media (max-width: 900px) {
-      .controller-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .scroll-controls {
-        grid-column: span 1;
-        flex-direction: column;
-      }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:inline-grid;place-items:center;border-radius:10px;color:#042233;font-weight:800}
+    .title{font-size:1.15rem;font-weight:800;color:var(--accent)}
+    .toolbar{display:flex;align-items:center;gap:8px}
+    .toolbar button{background:transparent;border:1px solid var(--glass);color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer}
+    .main{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(2,minmax(280px,1fr));gap:18px}
+    .card{background:var(--panel);padding:18px;border-radius:var(--radius);box-shadow:0 6px 18px rgba(3,12,26,0.5);border:1px solid rgba(255,255,255,0.03)}
+    .card h2{margin:0 0 12px;font-size:1rem;color:var(--accent);display:flex;align-items:center;gap:8px}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    select, .btn{width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(10,18,30,0.6);color:var(--muted);font-weight:600}
+    .row{display:flex;gap:10px}
+    .row .half{flex:1}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#002233;border:none}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+    .muted{font-size:0.85rem;color:#9fc9da}
+    .scroll-controls{grid-column:1 / -1;display:flex;gap:10px}
+    .small{font-size:0.9rem;padding:8px 10px}
+    /* compact for OBS use */
+    body.compact{padding:8px}
+    body.compact .card{padding:10px;border-radius:8px}
+    body.compact .title{font-size:0.95rem}
+    @media (max-width:880px){
+      .main{grid-template-columns:1fr}
+      .topbar{padding:0 8px}
+      .scroll-controls{flex-direction:column}
     }
   </style>
 </head>
-
 <body>
 
-  <div class="controller-grid">
-
-    <div class="section">
-      <h1>Live Ranking</h1>
-      <div class="controls">
-        <button onclick="sendAction('show')">Show</button>
-        <button onclick="sendAction('hide')">Hide</button>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">LR</div>
+      <div>
+        <div class="title">Live Ranking Controller</div>
+        <div class="muted">Control overlays, scoring and quick presets</div>
       </div>
     </div>
 
-    <div class="section">
-      <h1>Scoreboard</h1>
-      <div class="controls">
-        <button onclick="sendAction('scoreboard_show')">Show</button>
-        <button onclick="sendAction('scoreboard_hide')">Hide</button>
-      </div>
+    <div class="toolbar" role="toolbar" aria-label="controller toolbar">
+      <button id="compactToggle" title="Toggle compact mode" class="small">Compact</button>
+      <button id="helpBtn" title="Shortcuts" class="small">Shortcuts</button>
     </div>
-
-    <div class="section">
-      <h1>WWCD</h1>
-      <div class="controls">
-        <select id="wwcd"></select>
-        <button onclick="sendGame('wwcd','wwcd_channel','wwcd')">Set</button>
-      </div>
-    </div>
-
-    <div class="section">
-      <h1>Kills Stats</h1>
-      <div class="controls">
-        <select id="kills"></select>
-        <button onclick="sendGame('kills','kills_channel','kills')">Set</button>
-      </div>
-    </div>
-
-    <div class="section">
-      <h1>Match Ranking</h1>
-      <div class="controls">
-        <select id="match"></select>
-        <button onclick="sendGame('match_ranking','match_ranking_channel','match')">Set</button>
-      </div>
-    </div>
-
-    <div class="scroll-controls">
-      <button onclick="scrollControl('up')">▲ Scroll Up</button>
-      <button onclick="scrollControl('down')">▼ Scroll Down</button>
-    </div>
-
   </div>
+
+  <main class="main" id="grid">
+
+    <section class="card" aria-labelledby="liveTitle">
+      <h2 id="liveTitle">Live Ranking</h2>
+      <div class="controls">
+        <div class="row" style="width:100%">
+          <button class="btn primary" onclick="sendAction('show')">Show</button>
+          <button class="btn ghost" onclick="sendAction('hide')">Hide</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="scoreTitle">
+      <h2 id="scoreTitle">Scoreboard</h2>
+      <div class="controls">
+        <div class="row" style="width:100%">
+          <button class="btn primary" onclick="sendAction('scoreboard_show')">Show</button>
+          <button class="btn ghost" onclick="sendAction('scoreboard_hide')">Hide</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="wwcdTitle">
+      <h2 id="wwcdTitle">WWCD</h2>
+      <div class="controls">
+        <label class="muted" for="wwcd">Select game</label>
+        <div class="row">
+          <select id="wwcd" aria-label="WWCD game select"></select>
+          <button class="btn primary" onclick="sendGame('wwcd','wwcd_channel','wwcd')">Set</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="killsTitle">
+      <h2 id="killsTitle">Kills Stats</h2>
+      <div class="controls">
+        <label class="muted" for="kills">Select game</label>
+        <div class="row">
+          <select id="kills" aria-label="Kills game select"></select>
+          <button class="btn primary" onclick="sendGame('kills','kills_channel','kills')">Set</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="matchTitle">
+      <h2 id="matchTitle">Match Ranking</h2>
+      <div class="controls">
+        <label class="muted" for="match">Select game</label>
+        <div class="row">
+          <select id="match" aria-label="Match game select"></select>
+          <button class="btn primary" onclick="sendGame('match_ranking','match_ranking_channel','match')">Set</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="card scroll-controls">
+      <button class="btn primary" onclick="scrollControl('up')">▲ Scroll Up</button>
+      <button class="btn primary" onclick="scrollControl('down')">▼ Scroll Down</button>
+      <button class="btn ghost" onclick="sendAction('reset')">Reset</button>
+    </div>
+
+  </main>
 
   <script>
     const API = "/api/control";
+    const post = data => fetch(API, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(e=>console.warn('post failed',e));
 
-    const post = data =>
-      fetch(API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-    function populate(id, max = 15) {
-      const el = document.getElementById(id);
-      el.innerHTML = `<option value="">Select Game</option>`;
-      for (let i = 1; i <= max; i++) {
-        el.innerHTML += `<option value="Game ${i}">Game ${i}</option>`;
-      }
+    function populate(id,max=15){
+      const el=document.getElementById(id);
+      el.innerHTML='';
+      const placeholder=document.createElement('option'); placeholder.value=''; placeholder.textContent='Select Game'; el.appendChild(placeholder);
+      for(let i=1;i<=max;i++){ const opt=document.createElement('option'); opt.value=`Game ${i}`; opt.textContent=`Game ${i}`; el.appendChild(opt); }
     }
 
-    function sendAction(action) {
-      post({ action });
+    function sendAction(action){ post({action}); flashButton(action); }
+
+    function sendGame(action,channel,selectId){
+      const sel=document.getElementById(selectId);
+      const game=sel.value; if(!game){ return alert('Select a game first'); }
+      post({action,game}).then(()=>{ try{ new BroadcastChannel(channel).postMessage({game}); }catch(e){} });
     }
 
-    function sendGame(action, channel, selectId) {
-      const game = document.getElementById(selectId).value;
-      if (!game) return alert("Select a game first");
-      post({ action, game }).then(() =>
-        new BroadcastChannel(channel).postMessage({ game })
-      );
-    }
+    function scrollControl(direction){ post({action:'scroll',direction}); }
 
-    function scrollControl(direction) {
-      post({ action: "scroll", direction });
-    }
+    function flashButton(k){ /* tiny visual feedback via title change */ console.debug('action',k); }
 
     /* INIT */
-    populate("wwcd");
-    populate("kills");
-    populate("match");
+    populate('wwcd'); populate('kills'); populate('match');
 
-    /* OBS COMPACT MODE */
-    if (new URLSearchParams(location.search).has("compact")) {
-      document.body.classList.add("compact");
-    }
+    /* COMPACT MODE */
+    const compactToggle=document.getElementById('compactToggle');
+    function setCompact(v){ document.body.classList.toggle('compact',v); localStorage.setItem('lr_compact', v? '1':'0'); }
+    compactToggle.addEventListener('click',()=> setCompact(!document.body.classList.contains('compact')));
+    if(localStorage.getItem('lr_compact')==='1' || new URLSearchParams(location.search).has('compact')) setCompact(true);
+
+    /* SHORTCUTS */
+    document.getElementById('helpBtn').addEventListener('click',()=> alert('Shortcuts:\nS - Show Live\nH - Hide Live\nArrowUp/Down - Scroll')); 
+    window.addEventListener('keydown',e=>{
+      if(e.key==='s') sendAction('show');
+      if(e.key==='h') sendAction('hide');
+      if(e.key==='ArrowUp') scrollControl('up');
+      if(e.key==='ArrowDown') scrollControl('down');
+    });
   </script>
 
 </body>
