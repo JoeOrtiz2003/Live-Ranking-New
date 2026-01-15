@@ -1,256 +1,245 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Leaderboard Controller</title>
+
   <style>
+    /* =====================
+       THEME VARIABLES
+    ====================== */
+    :root {
+      --bg-main: linear-gradient(135deg, #0f2027, #2c5364);
+      --card-bg: rgba(24, 40, 72, 0.97);
+      --accent: #4fd2ff;
+      --accent-dark: #1976d2;
+      --text-main: #e0f7fa;
+      --radius: 18px;
+    }
+
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      padding: 48px;
-      background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
-      color: #e0f7fa;
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 32px;
       min-height: 100vh;
+      background: var(--bg-main);
+      color: var(--text-main);
     }
+
+    /* =====================
+       GRID LAYOUT
+    ====================== */
+    .controller-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(320px, 1fr));
+      gap: 32px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    /* =====================
+       SECTIONS
+    ====================== */
     .section {
-      background: rgba(24, 40, 72, 0.97);
-      border-radius: 20px;
-      box-shadow: 0 6px 32px rgba(0,40,80,0.22);
-      padding: 40px 48px 32px 48px;
-      margin-bottom: 48px;
-      max-width: 540px;
+      background: var(--card-bg);
+      padding: 28px 32px;
+      border-radius: var(--radius);
+      box-shadow: 0 6px 24px rgba(0, 40, 80, 0.25);
     }
+
     h1 {
-      font-size: 2.1rem;
+      margin: 0 0 20px;
+      font-size: 1.6rem;
       font-weight: 800;
-      margin-bottom: 28px;
-      letter-spacing: 1.5px;
-      color: #4fd2ff;
-      text-shadow: 0 3px 12px #00334d88;
+      color: var(--accent);
+      letter-spacing: 1px;
     }
+
+    /* =====================
+       CONTROLS
+    ====================== */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
     button {
-      margin: 16px 16px 0 0;
-      padding: 16px 40px;
-      font-size: 1.35rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(90deg, #4fd2ff 0%, #1976d2 100%);
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 3px 12px #00334d44;
-      transition: background 0.2s, transform 0.1s;
-    }
-    button:hover {
-      background: linear-gradient(90deg, #1976d2 0%, #4fd2ff 100%);
-      transform: translateY(-3px) scale(1.06);
-    }
-    select {
-      margin-right: 18px;
       padding: 14px 28px;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
+      font-weight: 700;
       border-radius: 10px;
-      border: 2px solid #4fd2ff;
-      background: #183050;
-      color: #4fd2ff;
-      font-weight: 600;
-      outline: none;
-      box-shadow: 0 2px 8px #00334d22;
-      transition: border 0.2s;
-    }
-    select:focus {
-      border: 2.5px solid #1976d2;
-      background: #223a5e;
-    }
-    @media (max-width: 700px) {
-      .section {
-        max-width: 99vw;
-        padding: 22px 4vw 18px 4vw;
-      }
-      button, select {
-        width: 100%;
-        margin: 16px 0 0 0;
-        font-size: 1.1rem;
-      }
-      h1 {
-        font-size: 1.4rem;
-      }
-    }
-    .bracket-wrapper {
-      max-height: 600px;
-      overflow-y: auto;
-      background: rgba(24, 40, 72, 0.97);
-      border-radius: 10px;
-      padding: 16px;
-      margin-top: 16px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    }
-    /* Make scroll buttons match the section width */
-    #scrollUpButton, #scrollDownButton {
-      width: 100%;
-      max-width: 540px;      /* Match .section max-width */
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      font-size: 1.2rem;
-      padding: 8px 0;
-      background: #1976d2;
-      color: #fff;
       border: none;
-      border-radius: 8px;
-      margin-bottom: 6px;
       cursor: pointer;
-      transition: background 0.2s;
+      color: #fff;
+      background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+      transition: transform 0.15s ease, background 0.2s;
     }
-    #scrollUpButton:hover, #scrollDownButton:hover {
-      background: #4fd2ff;
-      color: #183050;
+
+    button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+    }
+
+    select {
+      padding: 12px 18px;
+      font-size: 1.05rem;
+      border-radius: 8px;
+      border: 2px solid var(--accent);
+      background: #183050;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* =====================
+       SCROLL BUTTONS
+    ====================== */
+    .scroll-controls {
+      grid-column: span 2;
+      display: flex;
+      gap: 12px;
+    }
+
+    .scroll-controls button {
+      flex: 1;
+    }
+
+    /* =====================
+       COMPACT MODE (OBS)
+    ====================== */
+    body.compact {
+      padding: 16px;
+      background: #0f2027;
+    }
+
+    body.compact h1 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+
+    body.compact .section {
+      padding: 16px;
+      box-shadow: none;
+      border-radius: 12px;
+    }
+
+    body.compact button,
+    body.compact select {
+      font-size: 0.9rem;
+      padding: 10px 14px;
+    }
+
+    /* =====================
+       RESPONSIVE
+    ====================== */
+    @media (max-width: 900px) {
+      .controller-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .scroll-controls {
+        grid-column: span 1;
+        flex-direction: column;
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="section">
-    <h1>Live Ranking</h1>
-    <button onclick="send('show')">Show</button>
-    <button onclick="send('hide')">Hide</button>
-  </div>
 
-  <div class="section">
-    <h1>Scoreboard</h1>
-    <button onclick="send('scoreboard_show')">Show</button>
-    <button onclick="send('scoreboard_hide')">Hide</button>
-  </div>
+  <div class="controller-grid">
 
-  <div class="section">
-    <h1>WWCD</h1>
-    <select id="wwcdDropdown">
-      <option value="">Select Game</option>
-    </select>
-    <button onclick="sendWWCD()">Set WWCD</button>
-  </div>
+    <div class="section">
+      <h1>Live Ranking</h1>
+      <div class="controls">
+        <button onclick="sendAction('show')">Show</button>
+        <button onclick="sendAction('hide')">Hide</button>
+      </div>
+    </div>
 
-  <div class="section">
-    <h1>Kills Stats</h1>
-    <select id="killsDropdown">
-      <option value="">Select Game</option>
-    </select>
-    <button onclick="sendKills()">Set Kills</button>
-  </div>
+    <div class="section">
+      <h1>Scoreboard</h1>
+      <div class="controls">
+        <button onclick="sendAction('scoreboard_show')">Show</button>
+        <button onclick="sendAction('scoreboard_hide')">Hide</button>
+      </div>
+    </div>
 
-  <div class="section">
-    <h1>Match Ranking</h1>
-    <select id="matchRankingDropdown">
-      <option value="">Select Game</option>
-    </select>
-    <button onclick="sendMatchRanking()">Set Match</button>
-  </div>
+    <div class="section">
+      <h1>WWCD</h1>
+      <div class="controls">
+        <select id="wwcd"></select>
+        <button onclick="sendGame('wwcd','wwcd_channel','wwcd')">Set</button>
+      </div>
+    </div>
 
-  <button id="scrollUpButton" style="margin:8px 0 4px 0;">▲ Scroll Up</button>
-  <button id="scrollDownButton" style="margin:4px 0 8px 0;">▼ Scroll Down</button>
+    <div class="section">
+      <h1>Kills Stats</h1>
+      <div class="controls">
+        <select id="kills"></select>
+        <button onclick="sendGame('kills','kills_channel','kills')">Set</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h1>Match Ranking</h1>
+      <div class="controls">
+        <select id="match"></select>
+        <button onclick="sendGame('match_ranking','match_ranking_channel','match')">Set</button>
+      </div>
+    </div>
+
+    <div class="scroll-controls">
+      <button onclick="scrollControl('up')">▲ Scroll Up</button>
+      <button onclick="scrollControl('down')">▼ Scroll Down</button>
+    </div>
+
+  </div>
 
   <script>
-    // Dynamically add Game 1-15 options
-    const wwcdDropdown = document.getElementById('wwcdDropdown');
-    const killsDropdown = document.getElementById('killsDropdown');
-    const matchRankingDropdown = document.getElementById('matchRankingDropdown');
-    for (let i = 1; i <= 15; i++) {
-      const optWWCD = document.createElement('option');
-      optWWCD.value = `Game ${i}`;
-      optWWCD.textContent = `Game ${i}`;
-      wwcdDropdown.appendChild(optWWCD);
+    const API = "/api/control";
 
-      const optKills = document.createElement('option');
-      optKills.value = `Game ${i}`;
-      optKills.textContent = `Game ${i}`;
-      killsDropdown.appendChild(optKills);
-
-      const optMatchRanking = document.createElement('option');
-      optMatchRanking.value = `Game ${i}`;
-      optMatchRanking.textContent = `Game ${i}`;
-      matchRankingDropdown.appendChild(optMatchRanking);
-    }
-
-    function send(action) {
-      fetch('/api/control', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action })
-      }).then(res => res.json())
-        .then(data => console.log(data))
-        .catch(console.error);
-    }
-
-    const bc = new BroadcastChannel('wwcd_channel');
-    const killsBC = new BroadcastChannel('kills_channel');
-    const matchRankingBC = new BroadcastChannel('match_ranking_channel');
-
-    function sendWWCD() {
-      const game = wwcdDropdown.value;
-      if (game) {
-        fetch('/api/control', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'wwcd', game })
-        }).then(res => res.json())
-          .then(data => {
-            bc.postMessage({ game }); // Notify other tabs immediately
-            console.log(data);
-          })
-          .catch(console.error);
-      } else {
-        alert('Please select a game for WWCD.');
-      }
-    }
-
-    function sendKills() {
-      const game = killsDropdown.value;
-      if (game) {
-        fetch('/api/control', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'kills', game })
-        }).then(res => res.json())
-          .then(data => {
-            killsBC.postMessage({ game }); // Notify kills display immediately
-            console.log(data);
-          })
-          .catch(console.error);
-      } else {
-        alert('Please select a game for Kills Stats.');
-      }
-    }
-
-    function sendMatchRanking() {
-      const game = matchRankingDropdown.value;
-      if (game) {
-        fetch('/api/control', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'match_ranking', game })
-        }).then(res => res.json())
-          .then(data => {
-            matchRankingBC.postMessage({ game }); // Notify match ranking display immediately
-            console.log(data);
-          })
-          .catch(console.error);
-      } else {
-        alert('Please select a game for Match Ranking.');
-      }
-    }
-
-    document.getElementById('scrollUpButton').addEventListener('click', () => {
-      fetch('/api/control', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'scroll', direction: 'up' })
+    const post = data =>
+      fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
       });
-    });
-    document.getElementById('scrollDownButton').addEventListener('click', () => {
-      fetch('/api/control', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'scroll', direction: 'down' })
-      });
-    });
+
+    function populate(id, max = 15) {
+      const el = document.getElementById(id);
+      el.innerHTML = `<option value="">Select Game</option>`;
+      for (let i = 1; i <= max; i++) {
+        el.innerHTML += `<option value="Game ${i}">Game ${i}</option>`;
+      }
+    }
+
+    function sendAction(action) {
+      post({ action });
+    }
+
+    function sendGame(action, channel, selectId) {
+      const game = document.getElementById(selectId).value;
+      if (!game) return alert("Select a game first");
+      post({ action, game }).then(() =>
+        new BroadcastChannel(channel).postMessage({ game })
+      );
+    }
+
+    function scrollControl(direction) {
+      post({ action: "scroll", direction });
+    }
+
+    /* INIT */
+    populate("wwcd");
+    populate("kills");
+    populate("match");
+
+    /* OBS COMPACT MODE */
+    if (new URLSearchParams(location.search).has("compact")) {
+      document.body.classList.add("compact");
+    }
   </script>
+
 </body>
 </html>
