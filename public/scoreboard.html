@@ -2,40 +2,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Esports Scoreboard</title>
     <link rel="stylesheet" href="scoreboard/style.css" />
     <script src="scoreboard/script.js" defer></script>
-    <title>Table</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            background: #0a1422;
+            color: #eaf6ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .esports-scoreboard {
+            margin-top: 32px;
+            background: linear-gradient(135deg, #101c2c 80%, #1a3a5d 100%);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px #000a 0.2;
+            padding: 32px 24px 24px 24px;
+            max-width: 1200px;
+            width: 98vw;
+            min-width: 320px;
+            border: 2px solid #4fd2ff44;
+        }
+        .esports-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #4fd2ff;
+            text-align: center;
+            margin-bottom: 18px;
+            text-shadow: 0 2px 12px #1976d2aa;
+        }
+        .scoreboard-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+        .scoreboard-table th, .scoreboard-table td {
+            padding: 10px 12px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .scoreboard-table th {
+            background: #183050;
+            color: #4fd2ff;
+            font-size: 1.05rem;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 2px solid #4fd2ff88;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 4px #1976d2aa;
+        }
+        .scoreboard-table td {
+            background: #14223a;
+            color: #eaf6ff;
+            border-bottom: 1px solid #223a5d;
+            border-radius: 0 0 8px 8px;
+            font-weight: 600;
+        }
+        .scoreboard-table tr.highlight {
+            background: linear-gradient(90deg, #4fd2ff22, #1976d222);
+            box-shadow: 0 2px 12px #1976d2aa;
+        }
+        @media (max-width: 700px) {
+            .esports-scoreboard { padding: 10px 2px; }
+            .esports-title { font-size: 1.2rem; }
+            .scoreboard-table th, .scoreboard-table td { font-size: 0.9rem; padding: 6px 4px; }
+        }
+    </style>
 </head>
 <body>
-  <div id="scoreboard">
-    <div id="mainDiv">
-        <div id="mockupWrapper">
-            <div class="groupingWrapper">
-                <div class="innerGroupingWrapper">
-                    <div class="braketHeader">
-                        <div class="braketHeaderRank"><p>Rank</p></div>
-                        <div class="braketHeaderTeamName"><p>Team</p></div>
-                        <div class="braketHeaderTeamPoint"><p>Placement</p><p>Points</p></div>
-                        <div class="braketHeaderTeamElims"><p>Kill</p><p>Points</p></div>
-                        <div class="braketHeaderTeamTotal"><p>TOTAL</p><p>Points</p></div>
-                    </div>
-                    <div id="leftGrouping" class="grouping"></div>
-                </div>
-                <div class="innerGroupingWrapper">
-                    <div class="braketHeader">
-                        <div class="braketHeaderRank"><p>Rank</p></div>
-                        <div class="braketHeaderTeamName"><p>Team</p></div>
-                        <div class="braketHeaderTeamPoint"><p>Placement</p><p>Points</p></div>
-                        <div class="braketHeaderTeamElims"><p>Kill</p><p>Points</p></div>
-                        <div class="braketHeaderTeamTotal"><p>TOTAL</p><p>Points</p></div>
-                    </div>
-                    <div id="rightGrouping" class="grouping"></div>
-                </div>
-            </div>
-        </div>
+    <div class="esports-scoreboard">
+        <div class="esports-title">SCOREBOARD</div>
+        <table class="scoreboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Team</th>
+                    <th>Placement<br>Points</th>
+                    <th>Kill<br>Points</th>
+                    <th>Total<br>Points</th>
+                </tr>
+            </thead>
+            <tbody id="scoreboard-body">
+                <!-- Rows will be populated by script.js -->
+            </tbody>
+        </table>
     </div>
-  </div>
 </body>
 </html>
