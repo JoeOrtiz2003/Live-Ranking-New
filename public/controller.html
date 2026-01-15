@@ -40,6 +40,7 @@
     .row .half{flex:1}
     .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#002233;border:none}
     .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+    .active-flash{box-shadow:0 0 0 3px var(--accent-2),0 2px 8px var(--accent);transition:box-shadow 0.1s;}
     .muted{font-size:0.85rem;color:#9fc9da}
     .scroll-controls{grid-column:1 / -1;display:flex;gap:10px}
     .small{font-size:0.9rem;padding:8px 10px}
@@ -153,7 +154,17 @@
       post({action,game}).then(()=>{ try{ new BroadcastChannel(channel).postMessage({game}); }catch(e){} });
     }
 
-    function scrollControl(direction){ post({action:'scroll',direction}); }
+    function scrollControl(direction){
+      // Flash the corresponding scroll button
+      const btn = document.querySelector(
+        direction === 'up' ? '.scroll-controls button[onclick*="up"]' : '.scroll-controls button[onclick*="down"]'
+      );
+      if(btn){
+        btn.classList.add('active-flash');
+        setTimeout(()=>btn.classList.remove('active-flash'), 120);
+      }
+      post({action:'scroll',direction});
+    }
 
     function flashButton(k){ /* tiny visual feedback via title change */ console.debug('action',k); }
 
@@ -174,11 +185,25 @@
       '↑  — Scroll Up\n' +
       '↓  — Scroll Down'
     ));
+    // Prevent browser key repeat delay for ArrowUp/ArrowDown
+    let lastScrollDir = null;
     window.addEventListener('keydown',e=>{
+      if(e.repeat && (e.key==='ArrowUp'||e.key==='ArrowDown')){
+        // Allow rapid repeat
+        scrollControl(e.key==='ArrowUp'?'up':'down');
+        return;
+      }
       if(e.key==='s') sendAction('show');
       if(e.key==='h') sendAction('hide');
-      if(e.key==='ArrowUp') scrollControl('up');
-      if(e.key==='ArrowDown') scrollControl('down');
+      if(e.key==='ArrowUp') {
+        if(lastScrollDir!=='up'){ scrollControl('up'); lastScrollDir='up'; }
+      }
+      if(e.key==='ArrowDown') {
+        if(lastScrollDir!=='down'){ scrollControl('down'); lastScrollDir='down'; }
+      }
+    });
+    window.addEventListener('keyup',e=>{
+      if(e.key==='ArrowUp'||e.key==='ArrowDown') lastScrollDir=null;
     });
   </script>
 
