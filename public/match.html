@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Match Ranking</title>
+  <link rel="stylesheet" href="match/style.css" />
+</head>
+<body class="body-class">
+
+  <div id="animation-layer">
+    <div>
+      <p id="slogan">Match 1</p>
+      <div class="image-frame">
+        <div class="winner-frame">
+          <div class="team-frame">
+            <p id="team_tag"></p> <!-- Using team_tag instead of team_name -->
+            <img id="team_logo" src="" alt="Team Logo" />
+          </div>
+          <div class="winner-stats-wrapper">
+            <div class="winner-stats-frame">
+              <p class="smaller-text">Elims</p>
+              <p id="elims" class="bigger-text"></p>
+            </div>
+            <div class="divider"></div>
+            <div class="winner-stats-frame">
+              <p class="smaller-text">Rank Pts</p>
+              <p id="rank_pts" class="bigger-text"></p>
+            </div>
+            <div class="divider"></div>
+            <div class="winner-stats-frame">
+              <p class="smaller-text">Total</p>
+              <p id="points_total" class="bigger-text"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="bracket-header">
+        <p>#</p>
+        <div></div>
+        <div></div>
+        <p>Teams</p>
+        <p>Place</p>
+        <p>Kills</p>
+        <p>Total</p>
+      </div>
+      <div class="bracket-wrapper"></div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="match/script.js"></script>
+</body>
+</html>

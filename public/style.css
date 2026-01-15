@@ -1,0 +1,346 @@
+:root {
+  --mainWidth: min(90vw, 255px);
+  --font: 'Oswald', sans-serif;
+  --ranking-header-color: white;
+  --ranking-header-background-color: #10b0dd;
+  --ranking-element-color: white;
+  --ranking-uneven-background-color: #05618b;
+  --ranking-even-background-color: #319db3;
+  --alive-background-color: #ffffff;
+  --lower-background-color: #298ca0;
+  --dead-background-color: #0e0d0d;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family: var(--font);
+}
+
+.app-1080 {
+  width: 1920px;
+  height: 1080px;
+  transform-origin: 0 0;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  position: relative; /* added so absolute children position relative to this container */
+}
+
+#mainDiv {
+  position: absolute;
+  right: 20px;          /* distance from the right edge - adjust as needed */
+  top: 155px;           /* keep same vertical offset as before */
+  width: var(--mainWidth);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-transform: uppercase;
+  transform: translateX(0%) translateY(175px);
+  margin-right: 0;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out,
+  opacity 1;
+}
+
+.rankingHeader {
+  display: flex;
+  width: 100%;
+  background-color: var(--ranking-header-background-color);
+  color: var(--ranking-header-color);
+  padding: 8px 0;
+  -webkit-clip-path: polygon(24% 0, 88% 0, 100% 0, 100% 77%, 100% 100%, 0 100%, 0 80%, 0 30%, 7% 0) !important;
+  clip-path: polygon(24% 0, 88% 0, 100% 0, 100% 77%, 100% 100%, 0 100%, 0 80%, 0 30%, 7% 0) !important;
+}
+
+.rankingHeader > p {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+}
+
+#rankingHeaderRank,
+.rankingElementRank {
+  flex: 0 0 35px;
+  text-align: center;
+  padding-left: 10px;
+}
+
+#rankingHeaderTeam,
+.rankingElementLogoWrapper {
+  flex: 0 0 90px;
+}
+
+#rankingHeaderAlive {
+  flex: 0 0 60px;
+  justify-content: center;
+}
+
+.rankingElementAliveWrapper {
+  flex: 0 0 40px;
+  justify-content: center;
+}
+
+#rankingHeaderElims {
+  flex: 0 0 50px;
+  text-align: center;
+}
+
+.rankingElementKills {
+  flex: 0 0 70px;
+  text-align: center;
+}
+
+#rankingElementsWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.rankingElement {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 32px;              /* Increased height from 32px to 38px */
+  margin: 0;
+  padding: 0;
+}
+
+.rankingElementBackground {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 32px;              /* keep height in sync with rows */
+  background-color: var(--ranking-even-background-color);
+  z-index: 0;
+
+  /* apply the left-pointed polygon only to the background */
+  -webkit-clip-path: polygon(24% 0, 88% 0, 100% 0, 100% 77%, 100% 100%, 0 100%, 0 0%, 0 10%, 2% 0%) !important;
+  clip-path: polygon(24% 0, 88% 0, 100% 0, 100% 77%, 100% 100%, 0 100%, 0 0%, 0 10%, 2% 0%) !important;
+}
+
+/* override any clip on the outer element so inner content is not clipped */
+.rankingElement {
+  -webkit-clip-path: none;
+  clip-path: none;
+}
+
+.rankingElementWrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 32px;              /* Increased height from 32px to 38px */
+  align-items: center;
+  z-index: 1;
+}
+
+.rankingElementRank,
+.rankingElementName,
+.rankingElementKills,
+.rankingElementPoints {       /* If you have .rankingElementPoints */
+  font-size: 16px;            /* Optional: slightly larger text */
+  line-height: 32px;          /* Match new height */
+  font-weight: 510;
+  color: var(--ranking-element-color);
+  margin: 0;
+}
+
+.rankingElementWrapper > p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rankingElementLogoWrapper {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+}
+
+.rankingElementLogo {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  /* margin-right: 8px; Add gap to the right of the logo */
+}
+
+.rankingElementAliveWrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rankingElementAlive {
+  width: 5px;
+  height: 20px;
+  background-color: var(--alive-background-color);
+  border-radius: 25px;
+}
+
+.rankingElement:nth-child(even) .rankingElementBackground {
+  background-color: var(--ranking-uneven-background-color);
+}
+
+.fadedTeam {
+  opacity: 1.0;
+  filter: grayscale(100%);
+  transition: all 0.5s ease-in-out;
+}
+
+.fadedTeam .rankingElementRank,
+.fadedTeam .rankingElementName,
+.fadedTeam .rankingElementLogo,
+.fadedTeam .rankingElementKills,
+.fadedTeam .rankingElementAlive {
+  opacity: 0.4;
+  filter: grayscale(100%);
+}
+
+.lowerHeader {
+  display: flex;
+  width: 100%;
+  background-color: var(--lower-background-color);
+  color: white;
+  padding: 8px 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.lowerHeaderInner {
+  display: flex;
+  gap: 60px;
+}
+
+.lowerHeaderSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.statusIndicatorBox {
+  width: 8px;
+  height: 10px;
+  border: 1px solid var(--ranking-uneven-background-color);
+}
+
+.whiteBox {
+  background-color: var(--alive-background-color);
+}
+
+.blackBox {
+  background-color: var(--dead-background-color);
+}
+
+.statusIndicatorText {
+  margin: 0;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.5s ease-in-out;
+  will-change: transform, opacity;
+}
+
+/*@keyframes slideInLeft {
+  from { transform: translateX(-100%) translateY(115px); opacity: 0; }
+  to   { transform: translateX(0%) translateY(115px); opacity: 1; }
+}
+@keyframes slideOutRight {
+  from { transform: translateX(0%) translateY(115px); opacity: 1; }
+  to   { transform: translateX(100%) translateY(115px); opacity: 0; }
+}
+
+#mainDiv.slide-in-left {
+  animation: slideInLeft 0.7s forwards;
+}
+#mainDiv.slide-out-right {
+  animation: slideOutRight 0.7s forwards;
+}*/
+
+@keyframes fadeSlideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
+}
+@keyframes fadeSlideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+/*.animated-in {
+  animation: fadeSlideInLeft 0.10s ease-in-out forwards;
+}
+.animated-out {
+  animation: fadeSlideOutRight 0.10s ease-in-out forwards;
+}*/
+
+.stagger-animate-in {
+  animation: fadeSlideInRight 0.20s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.stagger-animate-out {
+  animation: fadeSlideOutRight 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Optional: Prevent pointer events during animation */
+.animating-columns * {
+  pointer-events: none;
+}
+
+*,
+::before,
+::after {
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+}
+
+body {
+  margin: 0;
+  line-height: inherit;
+}
+
+h1 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}

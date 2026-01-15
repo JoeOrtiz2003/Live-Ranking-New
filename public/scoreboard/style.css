@@ -1,0 +1,289 @@
+:root {
+    --table-font: MonserratSemiBold;
+    --secondary-font: MonserratRegular;
+    --braket-header-color: white;
+    --braket-header-primary-color: #10b0dd;
+    --braket-header-secondary-color: #10b0dd;
+    --braket-primary-color: white;
+    --braket-secondary-color: white;
+    --braket-odd-background-color: #05618b;
+    --braket-even-background-color: #298ca0;
+    --svg-color: white; /* Color Chicken */
+}
+
+body {
+    margin: 0;
+    font-family: var(--secondary-font);
+    background-color: #f4f4f4;
+}
+
+.teamName {
+    font-weight: 100;
+    color: var(--braket-primary-color);
+    text-align: left;
+    max-inline-size: 150px; /* limits max width in a writing-mode-aware way */
+    width: 100%;
+    line-height: 1.2;
+    font-size: 0.5px;
+    padding: 0;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+}
+
+#eventHeadlingText {
+    display: none;
+}
+
+#eventName {
+    display: none;
+}
+
+.groupingWrapper {
+    display: flex;
+    margin-top: 0px;
+    gap: 22px;
+    z-index: 10;
+    justify-content: center; /* Center the grouping containers horizontally */
+}
+
+.innerGroupingWrapper {
+    display: flex;
+    width: 842px; /* Match the width of the braketHeader */
+    height: auto;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center; /* Vertically align the content */
+}
+
+.braketHeader {
+    display: flex;
+    width: 873px;
+    height: 49px;
+    gap: 3px;
+}
+
+.braketHeader > div {
+    display: flex;
+    height: 49px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--braket-header-color);
+    background-color: var(--braket-header-primary-color);
+}
+
+.braketHeader > div > p {
+    line-height: 25px;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+}
+
+.braketHeader > .braketHeaderRank {
+    width: 95px;
+    background-color: var(--braket-header-secondary-color);
+}
+
+.braketHeaderTeamName {
+    width: 225px;
+}
+
+.braketHeaderTeamPoint,
+.braketHeaderTeamElims,
+.braketHeaderTeamTotal {
+    width: 160px; /* Same width for all */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5px; /* Slight padding for spacing */
+}
+
+.braketHeaderTeamPoint p,
+.braketHeaderTeamElims p,
+.braketHeaderTeamTotal p {
+    text-align: center;
+}
+
+.grouping {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+    width: 100%; /* Ensure grouping takes full width */
+}
+
+.teamBraket {
+    display: flex;
+    width: 873px;
+    height: 66px;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.teamBraket > div {
+    display: flex;
+    height: 66px;
+    padding: 3px;
+    align-items: center;
+    color: var(--braket-primary-color);
+}
+
+.teamBraket p {
+    font-size: 18.1px;
+    margin: 0;
+}
+
+.teamBraket:nth-child(odd) {
+    background-color: var(--braket-odd-background-color);
+}
+
+.teamBraket:nth-child(even) {
+    background-color: var(--braket-even-background-color);
+}
+
+.teamPositionWrapper {
+    width: 95px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.teamPositionIndicator {
+    line-height: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--braket-secondary-color);
+}
+
+.teamPosition {
+    width: 60px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 30px;
+}
+
+.teamLogoWrapper {
+    display: flex;
+    align-items: center;
+    width: 225px;
+    margin-left: -15px; /* Adjust the value as needed */
+}
+
+.teamNoLogo {
+    width: 53px;
+    height: 53px;
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+.teamLogo {
+    vertical-align: middle;
+    width: 53px;
+    height: 53px;
+    object-fit: cover;
+}
+
+/* New wrapper for place points and elims */
+.teamPointsElimsWrapper {
+    display: flex;
+    gap: 10px; /* Space between points and elims */
+    width: 320px; /* 160 + 160 */
+    justify-content: center;
+    align-items: center;
+}
+
+
+.teamElimsWrapper {
+    width: 160px; /* Match header width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 0 15px; /* adds 15px left margin to move right */
+}
+
+.teamPlacePointsWrapper {
+    width: 160px; /* Match header width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 0 15px; /* adds 15px left margin to move right */
+}
+
+
+.teamTotalWrapper {
+    width: 160px; /* Match header width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.teamPlacePoints,
+.teamElims,
+.teamTotal {
+    font-size: 14px;
+    text-align: center;
+    line-height: 20px;
+    margin: 0;
+}
+
+.teamTotalWrapper {
+    width: 221px;
+    justify-content: center;
+    display: flex;
+    align-items: center; /* Ensure proper vertical alignment */
+}
+
+.teamChickenDinnerWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.teamChickenDinnerIMG {
+    fill: var(--svg-color);
+    width: 20px; /* Adjust size of the chicken dinner icon */
+    height: 20px;
+}
+
+.teamChickenDinnerWrapper {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 100px; /* Consistent width for alignment */
+}
+
+@keyframes leftIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes leftOut {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-100%); opacity: 0; }
+}
+@keyframes rightIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes rightOut {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
+}
+
+.left-in {
+  animation: leftIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.left-out {
+  animation: leftOut 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.right-in {
+  animation: rightIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.right-out {
+  animation: rightOut 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

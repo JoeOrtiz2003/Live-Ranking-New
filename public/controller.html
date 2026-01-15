@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Leaderboard Controller</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 48px;
+      background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+      color: #e0f7fa;
+      min-height: 100vh;
+    }
+    .section {
+      background: rgba(24, 40, 72, 0.97);
+      border-radius: 20px;
+      box-shadow: 0 6px 32px rgba(0,40,80,0.22);
+      padding: 40px 48px 32px 48px;
+      margin-bottom: 48px;
+      max-width: 540px;
+    }
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      margin-bottom: 28px;
+      letter-spacing: 1.5px;
+      color: #4fd2ff;
+      text-shadow: 0 3px 12px #00334d88;
+    }
+    button {
+      margin: 16px 16px 0 0;
+      padding: 16px 40px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #4fd2ff 0%, #1976d2 100%);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 3px 12px #00334d44;
+      transition: background 0.2s, transform 0.1s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #1976d2 0%, #4fd2ff 100%);
+      transform: translateY(-3px) scale(1.06);
+    }
+    select {
+      margin-right: 18px;
+      padding: 14px 28px;
+      font-size: 1.25rem;
+      border-radius: 10px;
+      border: 2px solid #4fd2ff;
+      background: #183050;
+      color: #4fd2ff;
+      font-weight: 600;
+      outline: none;
+      box-shadow: 0 2px 8px #00334d22;
+      transition: border 0.2s;
+    }
+    select:focus {
+      border: 2.5px solid #1976d2;
+      background: #223a5e;
+    }
+    @media (max-width: 700px) {
+      .section {
+        max-width: 99vw;
+        padding: 22px 4vw 18px 4vw;
+      }
+      button, select {
+        width: 100%;
+        margin: 16px 0 0 0;
+        font-size: 1.1rem;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+    }
+    .bracket-wrapper {
+      max-height: 600px;
+      overflow-y: auto;
+      background: rgba(24, 40, 72, 0.97);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+    /* Make scroll buttons match the section width */
+    #scrollUpButton, #scrollDownButton {
+      width: 100%;
+      max-width: 540px;      /* Match .section max-width */
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1.2rem;
+      padding: 8px 0;
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #scrollUpButton:hover, #scrollDownButton:hover {
+      background: #4fd2ff;
+      color: #183050;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <h1>Live Ranking</h1>
+    <button onclick="send('show')">Show</button>
+    <button onclick="send('hide')">Hide</button>
+  </div>
+
+  <div class="section">
+    <h1>Scoreboard</h1>
+    <button onclick="send('scoreboard_show')">Show</button>
+    <button onclick="send('scoreboard_hide')">Hide</button>
+  </div>
+
+  <div class="section">
+    <h1>WWCD</h1>
+    <select id="wwcdDropdown">
+      <option value="">Select Game</option>
+    </select>
+    <button onclick="sendWWCD()">Set WWCD</button>
+  </div>
+
+  <div class="section">
+    <h1>Kills Stats</h1>
+    <select id="killsDropdown">
+      <option value="">Select Game</option>
+    </select>
+    <button onclick="sendKills()">Set Kills</button>
+  </div>
+
+  <div class="section">
+    <h1>Match Ranking</h1>
+    <select id="matchRankingDropdown">
+      <option value="">Select Game</option>
+    </select>
+    <button onclick="sendMatchRanking()">Set Match</button>
+  </div>
+
+  <button id="scrollUpButton" style="margin:8px 0 4px 0;">▲ Scroll Up</button>
+  <button id="scrollDownButton" style="margin:4px 0 8px 0;">▼ Scroll Down</button>
+
+  <script>
+    // Dynamically add Game 1-15 options
+    const wwcdDropdown = document.getElementById('wwcdDropdown');
+    const killsDropdown = document.getElementById('killsDropdown');
+    const matchRankingDropdown = document.getElementById('matchRankingDropdown');
+    for (let i = 1; i <= 15; i++) {
+      const optWWCD = document.createElement('option');
+      optWWCD.value = `Game ${i}`;
+      optWWCD.textContent = `Game ${i}`;
+      wwcdDropdown.appendChild(optWWCD);
+
+      const optKills = document.createElement('option');
+      optKills.value = `Game ${i}`;
+      optKills.textContent = `Game ${i}`;
+      killsDropdown.appendChild(optKills);
+
+      const optMatchRanking = document.createElement('option');
+      optMatchRanking.value = `Game ${i}`;
+      optMatchRanking.textContent = `Game ${i}`;
+      matchRankingDropdown.appendChild(optMatchRanking);
+    }
+
+    function send(action) {
+      fetch('/api/control', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action })
+      }).then(res => res.json())
+        .then(data => console.log(data))
+        .catch(console.error);
+    }
+
+    const bc = new BroadcastChannel('wwcd_channel');
+    const killsBC = new BroadcastChannel('kills_channel');
+    const matchRankingBC = new BroadcastChannel('match_ranking_channel');
+
+    function sendWWCD() {
+      const game = wwcdDropdown.value;
+      if (game) {
+        fetch('/api/control', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'wwcd', game })
+        }).then(res => res.json())
+          .then(data => {
+            bc.postMessage({ game }); // Notify other tabs immediately
+            console.log(data);
+          })
+          .catch(console.error);
+      } else {
+        alert('Please select a game for WWCD.');
+      }
+    }
+
+    function sendKills() {
+      const game = killsDropdown.value;
+      if (game) {
+        fetch('/api/control', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'kills', game })
+        }).then(res => res.json())
+          .then(data => {
+            killsBC.postMessage({ game }); // Notify kills display immediately
+            console.log(data);
+          })
+          .catch(console.error);
+      } else {
+        alert('Please select a game for Kills Stats.');
+      }
+    }
+
+    function sendMatchRanking() {
+      const game = matchRankingDropdown.value;
+      if (game) {
+        fetch('/api/control', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'match_ranking', game })
+        }).then(res => res.json())
+          .then(data => {
+            matchRankingBC.postMessage({ game }); // Notify match ranking display immediately
+            console.log(data);
+          })
+          .catch(console.error);
+      } else {
+        alert('Please select a game for Match Ranking.');
+      }
+    }
+
+    document.getElementById('scrollUpButton').addEventListener('click', () => {
+      fetch('/api/control', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'scroll', direction: 'up' })
+      });
+    });
+    document.getElementById('scrollDownButton').addEventListener('click', () => {
+      fetch('/api/control', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'scroll', direction: 'down' })
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live Ranking</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div id="app" class="app-1080">
+    <div id="mainDiv">
+      <div class="rankingHeader">
+        <p id="rankingHeaderRank">Rank</p>
+        <p id="rankingHeaderTeam">Team</p>
+        <p id="rankingHeaderAlive">Alive</p>
+        <p id="rankingHeaderElims">Elims</p>
+      </div>
+      <div id="rankingElementsWrapper"></div>
+
+      <div class="lowerHeader">
+        <div class="lowerHeaderInner">
+          <div class="lowerHeaderSection">
+            <div class="statusIndicatorBox whiteBox"></div>
+            <p class="statusIndicatorText">ALIVE</p>
+          </div>
+          <div class="lowerHeaderSection">
+            <div class="statusIndicatorBox blackBox"></div>
+            <p class="statusIndicatorText">ELIMINATED</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  /* 1080p scaling for the #app container */
+  (function() {
+    const app = document.getElementById('app');
+    if (!app) return;
+    function applyScale() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const scale = Math.min(vw / 1920, vh / 1080);
+      app.style.transform = 'scale(' + scale + ')';
+      app.style.width = '1920px';
+      app.style.height = '1080px';
+    }
+    window.addEventListener('resize', applyScale, { passive: true });
+    window.addEventListener('orientationchange', applyScale, { passive: true });
+    applyScale();
+  })();
+  </script>
+</body>
+</html>
