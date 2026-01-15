@@ -9,9 +9,10 @@
   --alive-background-color: #ffffff;
   --lower-background-color: #298ca0;
   --dead-background-color: #0e0d0d;
-  --size-RankingElement: 35px;
+  --size-RankingElement: 40px;
   --font-size-RankingElement: 18px;
   --size-weighted-RankingElement: 510;
+  --padding-right:1px;
 }
 
 @font-face {
@@ -77,7 +78,7 @@ body {
 
 #mainDiv {
   position: absolute;
-  right: 0px;          /* distance from the right edge - adjust as needed */
+  right: var(--padding-right);          /* distance from the right edge - adjust as needed */
   top: 155px;           /* keep same vertical offset as before */
   width: var(--mainWidth);
   display: flex;
@@ -111,7 +112,7 @@ body {
 .rankingElementRank {
   flex: 0 0 35px;
   text-align: center;
-  padding-left: 12px;
+  padding-left: 18px;
 }
 
 #rankingHeaderTeam,
@@ -194,6 +195,7 @@ body {
   font-weight: var(--size-weighted-RankingElement);
   color: var(--ranking-element-color);
   margin: 0;
+  font-family: 'Oswald-SemiBold';
 }
 
 .rankingElementWrapper > p {
@@ -205,12 +207,12 @@ body {
 .rankingElementLogoWrapper {
   display: flex;
   align-items: center;
-  padding-left: 15px;
+  padding-left: 10px;
 }
 
 .rankingElementLogo {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   object-fit: cover;
   /* margin-right: 8px; Add gap to the right of the logo */
 }
@@ -218,7 +220,7 @@ body {
 .rankingElementAliveWrapper {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .rankingElementAlive {
