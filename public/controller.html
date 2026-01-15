@@ -24,14 +24,22 @@
       -webkit-font-smoothing:antialiased;
     }
     .topbar{
-      max-width:1200px;margin:0 auto 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+      max-width:1200px;margin:0 auto 20px;display:flex;align-items:center;gap:12px;
     }
     .brand{display:flex;align-items:center;gap:12px}
     .logo{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:inline-grid;place-items:center;border-radius:10px;color:#042233;font-weight:800}
     .title{font-size:1.15rem;font-weight:800;color:var(--accent)}
     .toolbar{display:flex;align-items:center;gap:8px}
     .toolbar button{background:transparent;border:1px solid var(--glass);color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer}
-    .main{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(2,minmax(280px,1fr));gap:18px}
+    .main{
+      max-width:1200px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(280px,1fr));
+      gap:18px;
+      min-height:60vh;
+      align-items:stretch;
+    }
     .card{background:var(--panel);padding:18px;border-radius:var(--radius);box-shadow:0 6px 18px rgba(3,12,26,0.5);border:1px solid rgba(255,255,255,0.03)}
     .card h2{margin:0 0 12px;font-size:1rem;color:var(--accent);display:flex;align-items:center;gap:8px}
     .controls{display:flex;gap:8px;flex-wrap:wrap}
@@ -64,11 +72,6 @@
         <div class="title">Live Ranking Controller</div>
         <div class="muted">Control overlays, scoring and quick presets</div>
       </div>
-    </div>
-
-    <div class="toolbar" role="toolbar" aria-label="controller toolbar">
-      <button id="compactToggle" title="Toggle compact mode" class="small">Compact</button>
-      <button id="helpBtn" title="Shortcuts" class="small">Shortcuts</button>
     </div>
   </div>
 
@@ -171,20 +174,7 @@
     /* INIT */
     populate('wwcd'); populate('kills'); populate('match');
 
-    /* COMPACT MODE */
-    const compactToggle=document.getElementById('compactToggle');
-    function setCompact(v){ document.body.classList.toggle('compact',v); localStorage.setItem('lr_compact', v? '1':'0'); }
-    compactToggle.addEventListener('click',()=> setCompact(!document.body.classList.contains('compact')));
-    if(localStorage.getItem('lr_compact')==='1' || new URLSearchParams(location.search).has('compact')) setCompact(true);
-
-    /* SHORTCUTS */
-    document.getElementById('helpBtn').addEventListener('click',()=> alert(
-      'Shortcuts:\n' +
-      'S  — Show Live\n' +
-      'H  — Hide Live\n' +
-      '↑  — Scroll Up\n' +
-      '↓  — Scroll Down'
-    ));
+    // ...existing code...
     // Optimize: trigger scroll instantly on every keydown (including repeats)
     window.addEventListener('keydown',e=>{
       if(e.key==='s') sendAction('show');
