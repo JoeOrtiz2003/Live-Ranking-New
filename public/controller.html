@@ -167,7 +167,13 @@
     if(localStorage.getItem('lr_compact')==='1' || new URLSearchParams(location.search).has('compact')) setCompact(true);
 
     /* SHORTCUTS */
-    document.getElementById('helpBtn').addEventListener('click',()=> alert('Shortcuts:\nS - Show Live\nH - Hide Live\nArrowUp/Down - Scroll')); 
+    document.getElementById('helpBtn').addEventListener('click',()=> alert(
+      'Shortcuts:\n' +
+      'S  — Show Live\n' +
+      'H  — Hide Live\n' +
+      '↑  — Scroll Up\n' +
+      '↓  — Scroll Down'
+    ));
     window.addEventListener('keydown',e=>{
       if(e.key==='s') sendAction('show');
       if(e.key==='h') sendAction('hide');
