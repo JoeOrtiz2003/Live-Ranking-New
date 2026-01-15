@@ -86,11 +86,27 @@ async function fetchAndDisplayData() {
             div.innerHTML = html;
             rightGrouping.appendChild(div);
           });
-          // After repopulating, restore visibility state
+          // After repopulating, set visibility state without animation
+          const leftRows = Array.from(document.querySelectorAll('#leftGrouping .teamBraket'));
+          const rightRows = Array.from(document.querySelectorAll('#rightGrouping .teamBraket'));
           if (lastAction === "scoreboard_hide") {
-            hideScoreboard();
+            leftRows.forEach(row => {
+              row.classList.remove('left-in', 'left-out');
+              row.style.opacity = 0;
+            });
+            rightRows.forEach(row => {
+              row.classList.remove('right-in', 'right-out');
+              row.style.opacity = 0;
+            });
           } else {
-            showScoreboard();
+            leftRows.forEach(row => {
+              row.classList.remove('left-in', 'left-out');
+              row.style.opacity = 1;
+            });
+            rightRows.forEach(row => {
+              row.classList.remove('right-in', 'right-out');
+              row.style.opacity = 1;
+            });
           }
         }
     } catch (error) {
@@ -180,17 +196,22 @@ window.addEventListener('message', (event) => {
 window.showScoreboard = showScoreboard;
 window.hideScoreboard = hideScoreboard;
 
+
 let lastAction = null;
+let lastShownState = null; // 'show' or 'hide'
+
 
 setInterval(() => {
   fetch('/api/control')
     .then(res => res.json())
     .then(command => {
       if (command.action !== lastAction) {
-        if (command.action === "scoreboard_show") {
+        if (command.action === "scoreboard_show" && lastShownState !== 'show') {
           showScoreboard();
-        } else if (command.action === "scoreboard_hide") {
+          lastShownState = 'show';
+        } else if (command.action === "scoreboard_hide" && lastShownState !== 'hide') {
           hideScoreboard();
+          lastShownState = 'hide';
         }
         lastAction = command.action;
       }
