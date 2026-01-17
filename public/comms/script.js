@@ -268,7 +268,7 @@ function sendTotalCards(val) {
   const cappedVal = Math.min(parseInt(val), 5); // Cap at maximum 5
   post({ action: 'set_total_cards', value: cappedVal }).then(() => {
     // Update totalCards and rebuild cards immediately
-    totalCards = cappedVal;
+    totalCards = cappedVal; // Update the global totalCards variable
     currentOffset = 0; // Reset offset when total cards change
     queries = generateQueries(totalCards, currentOffset);
     urls = queries.map(query =>
