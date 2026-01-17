@@ -37,34 +37,7 @@ function createPlaceholderCard(index) {
     <div class="game-num">--</div>
   `;
 
-  // --- Button outside the card ---
-  const toggleBtn = document.createElement("button");
-  toggleBtn.className = "card-toggle-btn";
-  toggleBtn.textContent = "Hide Info";
-
-  wrapper.appendChild(toggleBtn);
   wrapper.appendChild(card);
-
-  // --- Per-card toggle with staggered effect ---
-  const extra = card.querySelector(".card-extra");
-  const children = Array.from(extra.children);
-
-  toggleBtn.addEventListener("click", () => {
-    const hiding = !children[0].classList.contains("hidden");
-    let targets = hiding ? children.slice().reverse() : children;
-
-    targets.forEach((el, index) => {
-      setTimeout(() => {
-        if (hiding) {
-          el.classList.add("hidden");   // slide-down
-        } else {
-          el.classList.remove("hidden"); // slide-up
-        }
-      }, index * 200);
-    });
-
-    toggleBtn.textContent = hiding ? "Show Info" : "Hide Info";
-  });
 
   return wrapper;
 }
@@ -150,20 +123,42 @@ function pollControlState() {
       if (data.commsAction === 'show') {
         isVisible = true;
         const container = document.getElementById('games-container');
-        container.style.opacity = '0';
         container.style.display = 'flex';
-        setTimeout(() => {
-          container.style.transition = 'opacity 0.3s ease';
-          container.style.opacity = '1';
-        }, 10);
+        
+        // Slide up animation left to right
+        const cards = Array.from(document.querySelectorAll('.game-card'));
+        cards.forEach((card, index) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(50px)';
+          setTimeout(() => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, index * 150);
+        });
       } else if (data.commsAction === 'hide') {
         isVisible = false;
         const container = document.getElementById('games-container');
-        container.style.transition = 'opacity 0.3s ease';
-        container.style.opacity = '0';
+        
+        // Slide down animation right to left
+        const cards = Array.from(document.querySelectorAll('.game-card')).reverse();
+        cards.forEach((card, index) => {
+          setTimeout(() => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+          }, index * 150);
+        });
+        
         setTimeout(() => {
           container.style.display = 'none';
-        }, 300);
+          // Reset styles for next show
+          Array.from(document.querySelectorAll('.game-card')).forEach(card => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+            card.style.transition = 'none';
+          });
+        }, cards.length * 150 + 500);
       }
       if (data.totalCards !== undefined && data.totalCards !== totalCards) {
         totalCards = data.totalCards;
