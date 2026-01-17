@@ -266,5 +266,15 @@ function sendTotalCards(val) {
     return;
   }
   const cappedVal = Math.min(parseInt(val), 5); // Cap at maximum 5
-  post({ action: 'set_total_cards', value: cappedVal });
+  post({ action: 'set_total_cards', value: cappedVal }).then(() => {
+    // Update totalCards and rebuild cards immediately
+    totalCards = cappedVal;
+    currentOffset = 0; // Reset offset when total cards change
+    queries = generateQueries(totalCards, currentOffset);
+    urls = queries.map(query =>
+      `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(query)}`
+    );
+    buildCards();
+    refreshAll();
+  });
 }
