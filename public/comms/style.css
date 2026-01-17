@@ -2,6 +2,55 @@
   --main-color: #31b4d7;
 }
 
+@font-face {
+    font-family: "Anton-Regular";
+    src: url("./fonts/Anton-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Roboto-Regular";
+    src: url("./fonts/Roboto-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Oswald-SemiBold";
+    src: url("./fonts/Oswald-SemiBold.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Oswald-Regular";
+    src: url("./fonts/Oswald-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "agencygothicct_condensed";
+    src: url("./fonts/agencygothicct_condensed.otf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Agency Gothic CT Bold";
+    src: url("./fonts/Agency Gothic CT Bold.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "agencygothicct_medium";
+    src: url("./fonts/agencygothicct_medium.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
 body {
   font-family: Arial, sans-serif;
   background: transparent;
@@ -105,13 +154,15 @@ body {
   width: 100%;
   position: relative;
   z-index: 2;
-  font-family: 'Press Gothic Regular';
+  font-family: 'Agency Gothic CT Bold';
   font-size: 35px;
+  text-transform: uppercase;
+  
 }
 
 .total {
   font-size: 30px;
-  font-family: 'Agency FB', Arial, sans-serif;
+  font-family: 'Agency Gothic CT Bold';
   font-weight: bold;
 }
 
@@ -119,7 +170,7 @@ body {
   font-size: 30px;
   margin-bottom: 60px;
   font-weight: bold;
-  font-family: 'Agency FB', Arial, sans-serif;
+  font-family: 'Agency Gothic CT Bold';
 }
 
 .game-num {
@@ -132,7 +183,7 @@ body {
   z-index: 2;
   border-radius: 0 0 10px 10px;
   text-align: center;
-  font-family: 'Press Gothic Regular';
+  font-family: 'Agency Gothic CT Bold';
   font-size: 34px;
 }
 
