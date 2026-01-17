@@ -23,7 +23,8 @@ let commsAction = "show";
 let maxEliminatedTeams = 16;
 
 // 🔥 COMMS STATE
-let totalCards = 3;
+// Initialize totalCards with a default value, but allow it to be updated dynamically
+let totalCards = 5; // Default value, can be updated via API
 let commsOffset = 0;
 
 /* =========================
