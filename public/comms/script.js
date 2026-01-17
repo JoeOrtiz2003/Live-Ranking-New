@@ -124,7 +124,7 @@ function pollControlState() {
     .then(data => {
       // Handle totalCards change first
       if (data.totalCards !== undefined && data.totalCards !== totalCards) {
-        totalCards = data.totalCards;
+        totalCards = Math.min(data.totalCards, 5); // Cap at maximum 5 cards
         currentOffset = 0; // Reset offset when total cards change
         queries = generateQueries(totalCards, currentOffset);
         urls = queries.map(query =>
