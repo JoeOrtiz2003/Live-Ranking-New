@@ -3,12 +3,13 @@ let sheetName = 'WWCD';
 let totalCards = 3; // number of cards
 let isVisible = true;
 let lastCommsAction = null; // Track previous state to prevent repeated animations
+let currentOffset = 0; // Track current pagination offset
 
-function generateQueries(count) {
+function generateQueries(count, offset = 0) {
   const baseColumns = ["B", "C", "D", "E", "G"];
   
   return Array.from({ length: count }, (_, i) => 
-    `SELECT ${baseColumns.join(", ")} LIMIT 1 OFFSET ${i}`
+    `SELECT ${baseColumns.join(", ")} LIMIT 1 OFFSET ${offset + i}`
   );
 }
 
@@ -124,7 +125,19 @@ function pollControlState() {
       // Handle totalCards change first
       if (data.totalCards !== undefined && data.totalCards !== totalCards) {
         totalCards = data.totalCards;
-        queries = generateQueries(totalCards);
+        currentOffset = 0; // Reset offset when total cards change
+        queries = generateQueries(totalCards, currentOffset);
+        urls = queries.map(query =>
+          `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(query)}`
+        );
+        buildCards();
+        refreshAll();
+      }
+
+      // Handle pagination offset change
+      if (data.commsOffset !== undefined && data.commsOffset !== currentOffset) {
+        currentOffset = data.commsOffset;
+        queries = generateQueries(5, currentOffset); // Always show 5 cards per page
         urls = queries.map(query =>
           `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(query)}`
         );
@@ -176,6 +189,64 @@ function pollControlState() {
               card.style.transition = 'none';
             });
           }, cards.length * 150 + 500);
+        } else if (data.commsAction === 'next') {
+          // Slide left animation for next
+          const container = document.getElementById('games-container');
+          const cards = Array.from(document.querySelectorAll('.game-card'));
+          
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.style.transition = 'all 0.5s ease';
+              card.style.opacity = '0';
+              card.style.transform = 'translateX(-100px)';
+            }, index * 100);
+          });
+          
+          setTimeout(() => {
+            buildCards();
+            refreshAll();
+            // Reset to initial state for new cards
+            const newCards = Array.from(document.querySelectorAll('.game-card'));
+            newCards.forEach((card, index) => {
+              card.style.opacity = '0';
+              card.style.transform = 'translateX(100px)';
+              card.style.transition = 'none';
+              setTimeout(() => {
+                card.style.transition = 'all 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateX(0)';
+              }, 10 + index * 100);
+            });
+          }, cards.length * 100 + 200);
+        } else if (data.commsAction === 'previous') {
+          // Slide right animation for previous
+          const container = document.getElementById('games-container');
+          const cards = Array.from(document.querySelectorAll('.game-card'));
+          
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.style.transition = 'all 0.5s ease';
+              card.style.opacity = '0';
+              card.style.transform = 'translateX(100px)';
+            }, index * 100);
+          });
+          
+          setTimeout(() => {
+            buildCards();
+            refreshAll();
+            // Reset to initial state for new cards
+            const newCards = Array.from(document.querySelectorAll('.game-card'));
+            newCards.forEach((card, index) => {
+              card.style.opacity = '0';
+              card.style.transform = 'translateX(-100px)';
+              card.style.transition = 'none';
+              setTimeout(() => {
+                card.style.transition = 'all 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateX(0)';
+              }, 10 + index * 100);
+            });
+          }, cards.length * 100 + 200);
         }
       }
 

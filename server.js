@@ -13,6 +13,7 @@ let killedAction = "show"; // show/hide for killed animation
 let commsAction = "show"; // show/hide for comms
 let maxEliminatedTeams = 16;
 let totalCards = 5;
+let commsOffset = 0; // Track current offset for pagination
 
 app.use(cors());
 app.use(express.json());
@@ -31,7 +32,8 @@ app.get('/api/control', (req, res) => {
     killedAction,
     commsAction,
     maxEliminatedTeams,
-    totalCards
+    totalCards,
+    commsOffset
   });
 });
 
@@ -73,6 +75,14 @@ app.post('/api/control', (req, res) => {
     res.json({ success: true });
   } else if (action === "comms_refresh_all") {
     commsAction = "refresh_all";
+    res.json({ success: true });
+  } else if (action === "comms_next") {
+    commsAction = "next";
+    commsOffset += 5;
+    res.json({ success: true });
+  } else if (action === "comms_previous") {
+    commsAction = "previous";
+    commsOffset = Math.max(0, commsOffset - 5);
     res.json({ success: true });
   } else if (action === "set_max_eliminated" && value !== undefined) {
     maxEliminatedTeams = value;

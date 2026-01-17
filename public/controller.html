@@ -123,6 +123,10 @@
         <div class="row" style="width:100%">
           <button class="btn primary" onclick="sendAction('comms_refresh_all')" style="transition:all 0.3s ease;">Refresh All</button>
         </div>
+        <div class="row" style="width:100%">
+          <button class="btn ghost" onclick="sendAction('comms_previous')" style="transition:all 0.3s ease;">◄ Previous</button>
+          <button class="btn primary" onclick="sendAction('comms_next')" style="transition:all 0.3s ease;">Next ►</button>
+        </div>
         <label class="muted" for="totalCards">Total Cards:</label>
         <div class="row">
           <input type="number" id="totalCards" min="1" max="24" value="3" style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(10,18,30,0.6);color:var(--muted);" />
