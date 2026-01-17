@@ -4,49 +4,49 @@
 
 @font-face {
     font-family: "Anton-Regular";
-    src: url("./fonts/Anton-Regular.ttf") format("truetype");
+    src: url("../fonts/Anton-Regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Roboto-Regular";
-    src: url("./fonts/Roboto-Regular.ttf") format("truetype");
+    src: url("../fonts/Roboto-Regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Oswald-SemiBold";
-    src: url("./fonts/Oswald-SemiBold.ttf") format("truetype");
+    src: url("../fonts/Oswald-SemiBold.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Oswald-Regular";
-    src: url("./fonts/Oswald-Regular.ttf") format("truetype");
+    src: url("../fonts/Oswald-Regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: "agencygothicct_condensed";
-    src: url("./fonts/agencygothicct_condensed.otf") format("truetype");
+    src: url("../fonts/agencygothicct_condensed.otf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Agency Gothic CT Bold";
-    src: url("./fonts/Agency Gothic CT Bold.ttf") format("truetype");
+    src: url("../fonts/Agency Gothic CT Bold.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: "agencygothicct_medium";
-    src: url("./fonts/agencygothicct_medium.ttf") format("truetype");
+    src: url("../fonts/agencygothicct_medium.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
