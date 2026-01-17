@@ -1,6 +1,5 @@
 :root {
-  --font: 'Oswald', sans-serif;
-  --match-ranking-slogan-color: #05618b;
+  --match-ranking-slogan-color: #041b25;
   --match-ranking-winner-frame-border-color: #05618b;
   --match-ranking-winner-frame-shadow-color: #10b0dd;
   --match-ranking-winner-frame-background-color: #05618b;
@@ -15,6 +14,34 @@
   --match-ranking-bracket-shadow-color: #05618b;
   --match-ranking-bracket-background-color: #05618b;
   --match-ranking-bracket-color: white;
+}
+
+@font-face {
+    font-family: "Anton-Regular";
+    src: url("../fonts/Anton-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Roboto-Regular";
+    src: url("../fonts/Roboto-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Oswald-SemiBold";
+    src: url("../fonts/Oswald-SemiBold.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Oswald-Regular";
+    src: url("../fonts/Oswald-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
 }
 
 body.body-class {
@@ -53,6 +80,7 @@ body.body-class {
   text-transform: uppercase;
   position: relative;
   top: 150px; /* Moves it 20px down */
+  font-family: 'Oswald-SemiBold';
 }
 
 
@@ -112,6 +140,7 @@ body.body-class {
   word-wrap: break-word;
   white-space: normal;
   overflow-wrap: anywhere;
+  font-family: 'Oswald-SemiBold';
 }
 
 .winner-stats-wrapper {
@@ -135,6 +164,7 @@ body.body-class {
   font-weight: 600;
   color: var(--match-ranking-bigger-text-color);
   text-align: center;
+  font-family: 'Oswald-SemiBold';
 }
 
 .smaller-text {
@@ -145,6 +175,7 @@ body.body-class {
   font-weight: 700;
   color: var(--match-ranking-smaller-text-color);
   text-align: center;
+  font-family: 'Oswald-SemiBold';
 }
 
 .divider {
@@ -175,6 +206,7 @@ body.body-class {
   background-color: var(--match-ranking-bracket-header-background-color);
   border-radius: 10px;
   box-shadow: inset 0 0 10px 5px var(--match-ranking-bracket-header-shadow-color);
+  font-family: 'Oswald-SemiBold';
 }
 
 .bracket-header > p {
@@ -202,6 +234,7 @@ body.body-class {
   border-radius: 10px;
   box-shadow: inset 0px 0px 10px 5px var(--match-ranking-bracket-shadow-color);
   margin-bottom: 8px;
+  font-family: 'Oswald-SemiBold';
 }
 
 .bracket > p {
@@ -209,17 +242,9 @@ body.body-class {
   font-weight: 700;
   color: var(--match-ranking-bracket-color);
   text-align: center;
-  width: 25%;
+  width: 20%;
 }
 
-.bracket > :nth-child(1),
-.bracket > :nth-child(2) {
-  width: 10%;
-}
-
-.bracket > :nth-child(3) {
-  width: 35%;
-}
 
 .bracket-logo img {
   max-width: 100%;
@@ -233,7 +258,24 @@ body.body-class {
   justify-content: right;
   width: 50px; /* Adjust width to your preference */
   height: 50px; /* Adjust height to your preference */
-  margin-right: 5px; /* Fine-tune spacing */
+  margin-left: 16px; /* Move logo a little right */
+  margin-right: 0;
+}
+
+.bracket-team {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.team-name {
+  font-size: 35px;
+  font-weight: 700;
+  color: var(--match-ranking-bracket-color);
+  text-align: left;
+  margin-left: 0;
+  width: auto;
+  font-family: 'Oswald-SemiBold';
 }
 
 @media (max-width: 768px) {
