@@ -22,7 +22,7 @@
       color:var(--muted);
       padding:28px;
       -webkit-font-smoothing:antialiased;
-    }
+   
     .topbar{
       max-width:1200px;margin:0 auto 20px;display:flex;align-items:center;gap:12px;
     }
@@ -217,7 +217,11 @@
 
     function sendTotalCards(){
       const val = document.getElementById('totalCards').value;
-      sendTotalCards(val);
+      if (window.sendTotalCards && typeof window.sendTotalCards === 'function') {
+        window.sendTotalCards(val);
+      } else {
+        alert('sendTotalCards function not found. Make sure comms/script.js is loaded.');
+      }
     }
 
     /* INIT */
