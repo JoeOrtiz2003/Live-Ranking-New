@@ -222,3 +222,29 @@ function handleCommsAction(action) {
 buildCards();
 refreshAll();
 setInterval(pollControlState, 500);
+
+function sendTotalCards(val) {
+  if (!val) {
+    alert('Enter a number');
+    return;
+  }
+  const cappedVal = Math.min(parseInt(val), 5); // Cap at maximum 5
+  post({ action: 'set_total_cards', value: cappedVal }).then(() => {
+    // Fetch updated totalCards from the backend
+    fetch('/api/control')
+      .then(res => res.json())
+      .then(data => {
+        if (data.totalCards !== undefined) {
+          totalCards = data.totalCards; // Update the global totalCards variable
+          currentOffset = 0; // Reset offset when total cards change
+          queries = generateQueries(totalCards, currentOffset);
+          urls = queries.map(query =>
+            `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(query)}`
+          );
+          buildCards();
+          refreshAll();
+        }
+      })
+      .catch(err => console.error('Error fetching updated totalCards:', err));
+  });
+}
