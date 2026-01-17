@@ -146,11 +146,12 @@ function pollControlState() {
           cards.forEach((card, index) => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(50px)';
+            card.style.transition = 'none'; // Disable transition initially
             setTimeout(() => {
               card.style.transition = 'all 0.5s ease';
               card.style.opacity = '1';
               card.style.transform = 'translateY(0)';
-            }, index * 150);
+            }, 10 + index * 150); // Base delay of 10ms to ensure reflow
           });
         } else if (data.commsAction === 'hide') {
           isVisible = false;
