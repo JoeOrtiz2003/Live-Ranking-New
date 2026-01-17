@@ -78,11 +78,11 @@ app.post('/api/control', (req, res) => {
     res.json({ success: true });
   } else if (action === "comms_next") {
     commsAction = "next";
-    commsOffset += 5;
+    commsOffset += totalCards; // Update commsOffset based on totalCards
     res.json({ success: true });
   } else if (action === "comms_previous") {
     commsAction = "previous";
-    commsOffset = Math.max(0, commsOffset - 5);
+    commsOffset = Math.max(0, commsOffset - totalCards); // Update commsOffset based on totalCards
     res.json({ success: true });
   } else if (action === "set_max_eliminated" && value !== undefined) {
     maxEliminatedTeams = value;

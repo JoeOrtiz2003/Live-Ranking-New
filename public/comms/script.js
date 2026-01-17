@@ -124,7 +124,7 @@ function pollControlState() {
     .then(data => {
       // Handle totalCards change first
       if (data.totalCards !== undefined && data.totalCards !== totalCards) {
-        totalCards = data.totalCards; // Cap at maximum 5 cards
+        totalCards = data.totalCards;
         currentOffset = 0; // Reset offset when total cards change
         queries = generateQueries(totalCards, currentOffset);
         urls = queries.map(query =>
@@ -137,7 +137,7 @@ function pollControlState() {
       // Handle pagination offset change
       if (data.commsOffset !== undefined && data.commsOffset !== currentOffset) {
         currentOffset = data.commsOffset;
-        queries = generateQueries(5, currentOffset); // Always show 5 cards per page
+        queries = generateQueries(totalCards, currentOffset); // Use totalCards for pagination
         urls = queries.map(query =>
           `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(query)}`
         );
