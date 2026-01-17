@@ -23,14 +23,34 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch(url)
       .then(response => response.text())
       .then(dataText => {
-        // Extract JSON from response
-        const jsonStr = dataText.match(/google\.visualization\.Query\.setResponse\((.*)\);/s)[1];
-        const data = JSON.parse(jsonStr);
+        // Extract JSON from response with error handling
+        const match = dataText.match(/google\.visualization\.Query\.setResponse\((.*)\);/s);
+        if (!match || !match[1]) {
+          console.error("Google Sheets response format error", dataText);
+          const wrapper = document.querySelector("#mockupWrapper");
+          if (wrapper) wrapper.innerHTML = "<p>Error: Unexpected data format.</p>";
+          return;
+        }
+        let data;
+        try {
+          data = JSON.parse(match[1]);
+        } catch (e) {
+          console.error("Failed to parse Google Sheets JSON:", e, match[1]);
+          const wrapper = document.querySelector("#mockupWrapper");
+          if (wrapper) wrapper.innerHTML = "<p>Error: Invalid data received.</p>";
+          return;
+        }
 
-        const rows = data.table.rows;
+        const rows = data.table && data.table.rows ? data.table.rows : [];
+
+        const wrapper = document.querySelector("#mockupWrapper");
+        if (!wrapper) {
+          console.error("#mockupWrapper element not found in DOM.");
+          return;
+        }
 
         if (rows.length === 0) {
-          document.querySelector("#mockupWrapper").innerHTML = "<p>No data available</p>";
+          wrapper.innerHTML = "<p>No data available</p>";
           return;
         }
 
@@ -48,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const showLogo = Boolean(teamLogoUrl);
 
         // Render main content inside #mockupWrapper
-        document.querySelector("#mockupWrapper").innerHTML = `
+        wrapper.innerHTML = `
           <div class="bgImage"></div>
           <div class="marquees">
             <div>
@@ -101,7 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch(error => {
         console.error("Error fetching or parsing Google Sheets data:", error);
-        document.querySelector("#mockupWrapper").innerHTML = "<p>Error loading data.</p>";
+        const wrapper = document.querySelector("#mockupWrapper");
+        if (wrapper) wrapper.innerHTML = "<p>Error loading data.</p>";
       });
   }
 
