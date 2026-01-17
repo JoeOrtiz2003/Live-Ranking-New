@@ -215,7 +215,7 @@
       post({action:'set_max_eliminated',value:parseInt(val)});
     }
 
-    function sendTotalCards(){
+    function sendTotalCards() {
       const val = document.getElementById('totalCards').value;
       if (window.sendTotalCards && typeof window.sendTotalCards === 'function') {
         window.sendTotalCards(val);
