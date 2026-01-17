@@ -1,23 +1,34 @@
+// =====================
+// CONFIG
+// =====================
 const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
 let sheetName = 'WWCD';
-let totalCards = 3; // number of cards
-let isVisible = true;
-let lastCommsAction = null; // Track previous state to prevent repeated animations
-let currentOffset = 0; // Track current pagination offset
 
+// Default fallback (will be overridden by controller)
+let totalCards = 3;
+
+let isVisible = true;
+let lastCommsAction = null;
+let currentOffset = 0;
+
+// =====================
+// QUERY HELPERS
+// =====================
 function generateQueries(count, offset = 0) {
   const baseColumns = ["B", "C", "D", "E", "G"];
-  
-  return Array.from({ length: count }, (_, i) => 
+  return Array.from({ length: count }, (_, i) =>
     `SELECT ${baseColumns.join(", ")} LIMIT 1 OFFSET ${offset + i}`
   );
 }
 
 let queries = generateQueries(totalCards);
-let urls = queries.map(query =>
-  `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(query)}`
+let urls = queries.map(q =>
+  `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(q)}`
 );
 
+// =====================
+// CARD BUILDING
+// =====================
 function createPlaceholderCard(index) {
   const wrapper = document.createElement("div");
   wrapper.className = "card-wrapper";
@@ -40,63 +51,68 @@ function createPlaceholderCard(index) {
   `;
 
   wrapper.appendChild(card);
-
   return wrapper;
 }
 
-function updateCard(card, data, fullUpdate = true) {
-  if (!data) return;
-  const { game, map, logoURL, total, mapURL } = data;
+function buildCards() {
+  const container = document.getElementById("games-container");
+  if (!container) return;
 
-  if (fullUpdate) {
-    card.classList.remove("placeholder");
-    card.querySelector(".map-name").textContent = map;
-    const bgImg = card.querySelector(".bg");
-    bgImg.src = mapURL;
-    bgImg.style.opacity = 1;
-    card.querySelector(".game-num").textContent = game;
+  container.innerHTML = "";
+  for (let i = 0; i < totalCards; i++) {
+    container.appendChild(createPlaceholderCard(i));
   }
-
-  const logoImg = card.querySelector(".logo");
-  logoImg.src = logoURL;
-  logoImg.style.opacity = 1;
-  card.querySelector(".total-value").textContent = total;
 }
 
+// =====================
+// DATA FETCH
+// =====================
 function fetchCardData(url) {
   return fetch(url)
     .then(res => res.text())
     .then(text => {
       const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/);
-      if (!match || !match[1]) return null;
+      if (!match) return null;
+
       const json = JSON.parse(match[1]);
       const row = json.table.rows[0];
       if (!row) return null;
 
-      const getValue = (cell) => (cell && cell.v != null) ? cell.v : '';
+      const v = c => (c && c.v != null) ? c.v : '';
 
       return {
-        game: getValue(row.c[0]),
-        map: getValue(row.c[1]),
-        logoURL: getValue(row.c[2]),
-        total: getValue(row.c[3]),
-        mapURL: getValue(row.c[4])
+        game: v(row.c[0]),
+        map: v(row.c[1]),
+        logoURL: v(row.c[2]),
+        total: v(row.c[3]),
+        mapURL: v(row.c[4])
       };
     })
     .catch(() => null);
 }
 
-function buildCards() {
-  const container = document.getElementById("games-container");
-  container.innerHTML = "";
+function updateCard(card, data, full = true) {
+  if (!card || !data) return;
 
-  urls.forEach((url, i) => {
-    const placeholder = createPlaceholderCard(i);
-    container.appendChild(placeholder);
-  });
+  if (full) {
+    card.classList.remove("placeholder");
+    card.querySelector(".map-name").textContent = data.map;
+    card.querySelector(".bg").src = data.mapURL;
+    card.querySelector(".bg").style.opacity = 1;
+    card.querySelector(".game-num").textContent = data.game;
+  }
+
+  const logo = card.querySelector(".logo");
+  logo.src = data.logoURL;
+  logo.style.opacity = 1;
+
+  card.querySelector(".total-value").textContent = data.total;
 }
 
-async function refreshAll() {
+// =====================
+// REFRESH
+// =====================
+function refreshAll() {
   urls.forEach((url, i) => {
     fetchCardData(url).then(data => {
       const card = document.getElementById(`card-${i}`);
@@ -105,176 +121,104 @@ async function refreshAll() {
   });
 }
 
-async function refreshExtra() {
-  urls.forEach((url, i) => {
-    fetchCardData(url).then(data => {
-      const card = document.getElementById(`card-${i}`);
-      if (card && data) updateCard(card, data, false);
-    });
-  });
+// =====================
+// CONTROL POLLING
+// =====================
+function rebuildUrls() {
+  queries = generateQueries(totalCards, currentOffset);
+  urls = queries.map(q =>
+    `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(q)}`
+  );
 }
 
-// --- Initial build only once ---
-buildCards();
-
-// Poll server for control messages
 function pollControlState() {
   fetch('/api/control')
     .then(res => res.json())
     .then(data => {
-      // Handle totalCards change first
-      if (data.totalCards !== undefined && data.totalCards !== totalCards) {
+
+      // TOTAL CARDS
+      if (typeof data.totalCards === 'number' && data.totalCards !== totalCards) {
         totalCards = data.totalCards;
-        currentOffset = 0; // Reset offset when total cards change
-        queries = generateQueries(totalCards, currentOffset);
-        urls = queries.map(query =>
-          `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(query)}`
-        );
+        currentOffset = 0;
+        rebuildUrls();
         buildCards();
         refreshAll();
       }
 
-      // Handle pagination offset change
-      if (data.commsOffset !== undefined && data.commsOffset !== currentOffset) {
+      // PAGINATION
+      if (typeof data.commsOffset === 'number' && data.commsOffset !== currentOffset) {
         currentOffset = data.commsOffset;
-        queries = generateQueries(totalCards, currentOffset); // Use totalCards for pagination
-        urls = queries.map(query =>
-          `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(query)}`
-        );
+        rebuildUrls();
         buildCards();
         refreshAll();
       }
 
-      // Only animate if commsAction state has changed
+      // ACTIONS (prevent repeat animation)
       if (data.commsAction !== lastCommsAction) {
         lastCommsAction = data.commsAction;
-
-        if (data.commsAction === 'show') {
-          isVisible = true;
-          const container = document.getElementById('games-container');
-          container.style.display = 'flex';
-          
-          // Slide up animation left to right
-          const cards = Array.from(document.querySelectorAll('.game-card'));
-          cards.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(50px)';
-            card.style.transition = 'none'; // Disable transition initially
-            setTimeout(() => {
-              card.style.transition = 'all 0.5s ease';
-              card.style.opacity = '1';
-              card.style.transform = 'translateY(0)';
-            }, 10 + index * 150); // Base delay of 10ms to ensure reflow
-          });
-        } else if (data.commsAction === 'hide') {
-          isVisible = false;
-          const container = document.getElementById('games-container');
-          
-          // Slide down animation right to left
-          const cards = Array.from(document.querySelectorAll('.game-card')).reverse();
-          cards.forEach((card, index) => {
-            setTimeout(() => {
-              card.style.transition = 'all 0.5s ease';
-              card.style.opacity = '0';
-              card.style.transform = 'translateY(50px)';
-            }, index * 150);
-          });
-          
-          setTimeout(() => {
-            container.style.display = 'none';
-            // Reset styles for next show
-            Array.from(document.querySelectorAll('.game-card')).forEach(card => {
-              card.style.opacity = '1';
-              card.style.transform = 'translateY(0)';
-              card.style.transition = 'none';
-            });
-          }, cards.length * 150 + 500);
-        } else if (data.commsAction === 'next') {
-          // Slide left animation for next
-          const container = document.getElementById('games-container');
-          const cards = Array.from(document.querySelectorAll('.game-card'));
-          
-          cards.forEach((card, index) => {
-            setTimeout(() => {
-              card.style.transition = 'all 0.5s ease';
-              card.style.opacity = '0';
-              card.style.transform = 'translateX(-100px)';
-            }, index * 100);
-          });
-          
-          setTimeout(() => {
-            buildCards();
-            refreshAll();
-            // Reset to initial state for new cards
-            const newCards = Array.from(document.querySelectorAll('.game-card'));
-            newCards.forEach((card, index) => {
-              card.style.opacity = '0';
-              card.style.transform = 'translateX(100px)';
-              card.style.transition = 'none';
-              setTimeout(() => {
-                card.style.transition = 'all 0.5s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateX(0)';
-              }, 10 + index * 100);
-            });
-          }, cards.length * 100 + 200);
-        } else if (data.commsAction === 'previous') {
-          // Slide right animation for previous
-          const container = document.getElementById('games-container');
-          const cards = Array.from(document.querySelectorAll('.game-card'));
-          
-          cards.forEach((card, index) => {
-            setTimeout(() => {
-              card.style.transition = 'all 0.5s ease';
-              card.style.opacity = '0';
-              card.style.transform = 'translateX(100px)';
-            }, index * 100);
-          });
-          
-          setTimeout(() => {
-            buildCards();
-            refreshAll();
-            // Reset to initial state for new cards
-            const newCards = Array.from(document.querySelectorAll('.game-card'));
-            newCards.forEach((card, index) => {
-              card.style.opacity = '0';
-              card.style.transform = 'translateX(-100px)';
-              card.style.transition = 'none';
-              setTimeout(() => {
-                card.style.transition = 'all 0.5s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateX(0)';
-              }, 10 + index * 100);
-            });
-          }, cards.length * 100 + 200);
-        }
+        handleCommsAction(data.commsAction);
       }
 
-      // Handle refresh separately (can happen multiple times)
       if (data.commsAction === 'refresh_all') {
         refreshAll();
       }
     })
-    .catch(err => console.error('Error polling control state:', err));
+    .catch(console.error);
 }
 
-setInterval(pollControlState, 500);
+// =====================
+// ANIMATIONS
+// =====================
+function handleCommsAction(action) {
+  const container = document.getElementById('games-container');
+  if (!container) return;
 
-function sendTotalCards(val) {
-  if (!val) {
-    alert('Enter a number');
-    return;
+  const cards = Array.from(document.querySelectorAll('.game-card'));
+
+  if (action === 'show') {
+    container.style.display = 'flex';
+    cards.forEach((c, i) => {
+      c.style.opacity = 0;
+      c.style.transform = 'translateY(40px)';
+      c.style.transition = 'none';
+      setTimeout(() => {
+        c.style.transition = 'all 0.45s ease';
+        c.style.opacity = 1;
+        c.style.transform = 'translateY(0)';
+      }, i * 120);
+    });
   }
-  const cappedVal = Math.min(parseInt(val), 5); // Cap at maximum 5
-  post({ action: 'set_total_cards', value: cappedVal }).then(() => {
-    // Update totalCards and rebuild cards immediately
-    totalCards = cappedVal; // Update the global totalCards variable
-    currentOffset = 0; // Reset offset when total cards change
-    queries = generateQueries(totalCards, currentOffset);
-    urls = queries.map(query =>
-      `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${encodeURIComponent(query)}`
-    );
-    buildCards();
-    refreshAll();
-  });
+
+  if (action === 'hide') {
+    cards.slice().reverse().forEach((c, i) => {
+      setTimeout(() => {
+        c.style.transition = 'all 0.45s ease';
+        c.style.opacity = 0;
+        c.style.transform = 'translateY(40px)';
+      }, i * 120);
+    });
+    setTimeout(() => container.style.display = 'none', cards.length * 120 + 300);
+  }
+
+  if (action === 'next' || action === 'previous') {
+    const dir = action === 'next' ? -100 : 100;
+    cards.forEach((c, i) => {
+      setTimeout(() => {
+        c.style.transition = 'all 0.4s ease';
+        c.style.opacity = 0;
+        c.style.transform = `translateX(${dir}px)`;
+      }, i * 80);
+    });
+    setTimeout(() => {
+      buildCards();
+      refreshAll();
+    }, cards.length * 80 + 200);
+  }
 }
+
+// =====================
+// INIT
+// =====================
+buildCards();
+refreshAll();
+setInterval(pollControlState, 500);
