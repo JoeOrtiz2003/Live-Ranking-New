@@ -228,7 +228,7 @@ function sendTotalCards(val) {
     alert('Enter a number');
     return;
   }
-  const cappedVal = Math.min(parseInt(val), 5); // Cap at maximum 5
+  const cappedVal = Math.min(parseInt(val), 15); // Cap at maximum 5
   post({ action: 'set_total_cards', value: cappedVal }).then(() => {
     // Fetch updated totalCards from the backend
     fetch('/api/control')
