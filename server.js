@@ -2,143 +2,205 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+
 const app = express();
 
+/* =========================
+   GLOBAL STATE
+========================= */
+
 let controlState = { action: "show", timestamp: Date.now() };
-let wwcdGame = "Game 1"; // default
-let killsGame = "Game 1"; // default
-let matchRankingGame = "Game 1"; // default
-let scrollQueue = []; // Use a queue for scroll directions
-let killedAction = "show"; // show/hide for killed animation
-let commsAction = "show"; // show/hide for comms
+
+let wwcdGame = "Game 1";
+let killsGame = "Game 1";
+let matchRankingGame = "Game 1";
+
+let scrollQueue = [];
+
+let killedAction = "show";
+let commsAction = "show";
+
 let maxEliminatedTeams = 16;
+
+// 🔥 COMMS STATE
 let totalCards = 3;
-let commsOffset = 0; // Track current offset for pagination
+let commsOffset = 0;
+
+/* =========================
+   MIDDLEWARE
+========================= */
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Get current state
+/* =========================
+   GET CURRENT STATE
+========================= */
+
 app.get('/api/control', (req, res) => {
-  // Return the next scroll direction in the queue, if any
-  const nextScroll = scrollQueue.length > 0 ? scrollQueue.shift() : null;
-  res.json({ 
-    ...controlState, 
-    wwcdGame, 
-    killsGame, 
-    matchRankingGame, 
+  const nextScroll = scrollQueue.length ? scrollQueue.shift() : null;
+
+  res.json({
+    action: controlState.action,
+    timestamp: controlState.timestamp,
+
+    wwcdGame,
+    killsGame,
+    matchRankingGame,
+
     scrollDirection: nextScroll,
+
     killedAction,
     commsAction,
+
     maxEliminatedTeams,
+
+    // 🔥 COMMS DATA
     totalCards,
     commsOffset
   });
 });
 
-// Set new state
+/* =========================
+   POST CONTROL ACTIONS
+========================= */
+
 app.post('/api/control', (req, res) => {
-  const { action, game, direction, value } = req.body; // Add value for settings
+  const { action, game, direction, value } = req.body;
+
+  // BASIC SHOW / HIDE
   if (["show", "hide", "refresh", "scoreboard_show", "scoreboard_hide"].includes(action)) {
     controlState = { action, timestamp: Date.now() };
-    res.json({ success: true });
-  } else if (action === "wwcd" && game) {
+    return res.json({ success: true });
+  }
+
+  // GAME SELECTORS
+  if (action === "wwcd" && game) {
     wwcdGame = game;
     controlState = { action, game, timestamp: Date.now() };
-    res.json({ success: true });
-  } else if (action === "kills" && game) {
+    return res.json({ success: true });
+  }
+
+  if (action === "kills" && game) {
     killsGame = game;
     controlState = { action, game, timestamp: Date.now() };
-    res.json({ success: true });
-  } else if (action === "match_ranking" && game) {
+    return res.json({ success: true });
+  }
+
+  if (action === "match_ranking" && game) {
     matchRankingGame = game;
     controlState = { action, game, timestamp: Date.now() };
-    res.json({ success: true });
-  } else if (action === "scroll" && direction) {
-    scrollQueue.push(direction); // Add to queue
-    res.json({ success: true });
-  } else if (action === "killed_show") {
-    killedAction = "show";
-    res.json({ success: true });
-  } else if (action === "killed_hide") {
-    killedAction = "hide";
-    res.json({ success: true });
-  } else if (action === "comms_show") {
-    commsAction = "show";
-    res.json({ success: true });
-  } else if (action === "comms_hide") {
-    commsAction = "hide";
-    res.json({ success: true });
-  } else if (action === "comms_hide_all") {
-    commsAction = "hide_all";
-    res.json({ success: true });
-  } else if (action === "comms_refresh_all") {
-    commsAction = "refresh_all";
-    res.json({ success: true });
-  } else if (action === "comms_next") {
-    commsAction = "next";
-    commsOffset += totalCards; // Update commsOffset based on totalCards
-    res.json({ success: true });
-  } else if (action === "comms_previous") {
-    commsAction = "previous";
-    commsOffset = Math.max(0, commsOffset - totalCards); // Update commsOffset based on totalCards
-    res.json({ success: true });
-  } else if (action === "set_max_eliminated" && value !== undefined) {
-    maxEliminatedTeams = value;
-    res.json({ success: true });
-  } else if (action === "set_total_cards" && value !== undefined) {
-    totalCards = value;
-    res.json({ success: true });
-  } else {
-    res.status(400).json({ error: "Invalid action" });
+    return res.json({ success: true });
   }
+
+  // SCROLL
+  if (action === "scroll" && direction) {
+    scrollQueue.push(direction);
+    return res.json({ success: true });
+  }
+
+  // KILLED
+  if (action === "killed_show") {
+    killedAction = "show";
+    return res.json({ success: true });
+  }
+
+  if (action === "killed_hide") {
+    killedAction = "hide";
+    return res.json({ success: true });
+  }
+
+  // COMMS VISIBILITY
+  if (action === "comms_show") {
+    commsAction = "show";
+    return res.json({ success: true });
+  }
+
+  if (action === "comms_hide") {
+    commsAction = "hide";
+    return res.json({ success: true });
+  }
+
+  if (action === "comms_refresh_all") {
+    commsAction = "refresh_all";
+    return res.json({ success: true });
+  }
+
+  // COMMS PAGINATION
+  if (action === "comms_next") {
+    commsAction = "next";
+    commsOffset += totalCards;
+    return res.json({ success: true });
+  }
+
+  if (action === "comms_previous") {
+    commsAction = "previous";
+    commsOffset = Math.max(0, commsOffset - totalCards);
+    return res.json({ success: true });
+  }
+
+  // SETTINGS
+  if (action === "set_max_eliminated" && value !== undefined) {
+    maxEliminatedTeams = parseInt(value);
+    return res.json({ success: true });
+  }
+
+  // 🔥 IMPORTANT FIX
+  if (action === "set_total_cards" && value !== undefined) {
+    totalCards = Math.max(1, Math.min(parseInt(value), 5));
+    commsOffset = 0;
+    commsAction = "refresh_all";
+    return res.json({ success: true });
+  }
+
+  res.status(400).json({ error: "Invalid action" });
 });
 
-// Serve controller.html at /controller
-app.get('/Controller', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'controller.html'));
-});
+/* =========================
+   ROUTES
+========================= */
 
-// Serve display.html at /display
-app.get('/Ranking', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'display.html'));
-});
+app.get('/Controller', (_, res) =>
+  res.sendFile(path.join(__dirname, 'public', 'controller.html'))
+);
 
-// Serve scoreboard.html at /scoreboard
-app.get('/Scoreboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'scoreboard.html'));
-});
+app.get('/Ranking', (_, res) =>
+  res.sendFile(path.join(__dirname, 'public', 'display.html'))
+);
 
-app.get('/Kills', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'kills.html'));
-});
+app.get('/Scoreboard', (_, res) =>
+  res.sendFile(path.join(__dirname, 'public', 'scoreboard.html'))
+);
 
-// Serve wwcd.html at /WWCD
-app.get('/WWCD', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'wwcd.html'));
-});
+app.get('/Kills', (_, res) =>
+  res.sendFile(path.join(__dirname, 'public', 'kills.html'))
+);
 
-app.get('/Match', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'match.html'));
-});
+app.get('/WWCD', (_, res) =>
+  res.sendFile(path.join(__dirname, 'public', 'wwcd.html'))
+);
 
-// Serve killed.html at /Killed
-app.get('/Killed', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'killed.html'));
-});
+app.get('/Match', (_, res) =>
+  res.sendFile(path.join(__dirname, 'public', 'match.html'))
+);
 
-// Serve comms.html at /Comms
-app.get('/Comms', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'comms.html'));
-});
+app.get('/Killed', (_, res) =>
+  res.sendFile(path.join(__dirname, 'public', 'killed.html'))
+);
 
-// Fallback: redirect to controller
-app.get('*', (req, res) => {
-  res.redirect('/Controller');
-});
+app.get('/Comms', (_, res) =>
+  res.sendFile(path.join(__dirname, 'public', 'comms.html'))
+);
+
+// Fallback
+app.get('*', (_, res) => res.redirect('/Controller'));
+
+/* =========================
+   START SERVER
+========================= */
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
