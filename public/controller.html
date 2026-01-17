@@ -248,7 +248,12 @@
 
       // Trigger sendTotalCards when comms_show is pressed
       if (action === 'comms_show') {
-        sendTotalCards();
+        // Do not reset currentOffset when showing comms
+        handleCommsAction('show');
+      }
+
+      if (action === 'comms_hide') {
+        handleCommsAction('hide');
       }
     }
 
