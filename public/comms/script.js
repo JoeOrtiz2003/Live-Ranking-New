@@ -106,7 +106,16 @@ function updateCard(card, data, full = true) {
   logo.src = data.logoURL;
   logo.style.opacity = 1;
 
-  card.querySelector(".total-value").textContent = data.total;
+  const totalValueElement = card.querySelector(".total-value");
+  totalValueElement.textContent = data.total;
+
+  // Hide card-extra if total value is 0
+  const cardExtra = card.querySelector(".card-extra");
+  if (data.total === 0 || data.total === "0") {
+    cardExtra.style.display = "none";
+  } else {
+    cardExtra.style.display = "block";
+  }
 }
 
 // =====================
