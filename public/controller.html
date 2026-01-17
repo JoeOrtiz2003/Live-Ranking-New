@@ -224,6 +224,16 @@
       }
     }
 
+    function sendAction(action) {
+      post({ action });
+      flashButton(action);
+
+      // Trigger sendTotalCards when comms_show is pressed
+      if (action === 'comms_show') {
+        sendTotalCards();
+      }
+    }
+
     /* INIT */
     populate('wwcd'); populate('kills'); populate('match');
 
