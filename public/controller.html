@@ -217,8 +217,7 @@
 
     function sendTotalCards(){
       const val = document.getElementById('totalCards').value;
-      if(!val){ return alert('Enter a number'); }
-      post({action:'set_total_cards',value:parseInt(val)});
+      sendTotalCards(val);
     }
 
     /* INIT */

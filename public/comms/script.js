@@ -124,7 +124,7 @@ function pollControlState() {
     .then(data => {
       // Handle totalCards change first
       if (data.totalCards !== undefined && data.totalCards !== totalCards) {
-        totalCards = Math.min(data.totalCards, 5); // Cap at maximum 5 cards
+        totalCards = data.totalCards; // Cap at maximum 5 cards
         currentOffset = 0; // Reset offset when total cards change
         queries = generateQueries(totalCards, currentOffset);
         urls = queries.map(query =>
@@ -259,3 +259,12 @@ function pollControlState() {
 }
 
 setInterval(pollControlState, 500);
+
+function sendTotalCards(val) {
+  if (!val) {
+    alert('Enter a number');
+    return;
+  }
+  const cappedVal = Math.min(parseInt(val), 5); // Cap at maximum 5
+  post({ action: 'set_total_cards', value: cappedVal });
+}
