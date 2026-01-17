@@ -117,12 +117,11 @@
       <h2 id="commsTitle">Comms</h2>
       <div class="controls">
         <div class="row" style="width:100%">
-          <button class="btn primary" onclick="sendAction('comms_show')">Show</button>
-          <button class="btn ghost" onclick="sendAction('comms_hide')">Hide</button>
+          <button class="btn primary" onclick="sendAction('comms_show')" style="transition:all 0.3s ease;">Show</button>
+          <button class="btn ghost" onclick="sendAction('comms_hide')" style="transition:all 0.3s ease;">Hide</button>
         </div>
         <div class="row" style="width:100%">
-          <button class="btn ghost" onclick="sendAction('comms_hide_all')">Hide All</button>
-          <button class="btn primary" onclick="sendAction('comms_refresh_all')">Refresh All</button>
+          <button class="btn primary" onclick="sendAction('comms_refresh_all')" style="transition:all 0.3s ease;">Refresh All</button>
         </div>
         <label class="muted" for="totalCards">Total Cards:</label>
         <div class="row">

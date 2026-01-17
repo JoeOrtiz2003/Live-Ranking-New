@@ -1,6 +1,6 @@
 const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
 let sheetName = 'WWCD';
-let totalCards = 5; // number of cards
+let totalCards = 3; // number of cards
 let isVisible = true;
 
 function generateQueries(count) {
@@ -139,36 +139,8 @@ async function refreshExtra() {
   });
 }
 
-// --- Event listeners for buttons ---
-document.getElementById("refresh-all").addEventListener("click", refreshAll);
-document.getElementById("refresh-extra").addEventListener("click", refreshExtra);
-
 // --- Initial build only once ---
 buildCards();
-
-// --- Toggle All Show/Hide ---
-const toggleAllBtn = document.getElementById("toggle-all-btn");
-toggleAllBtn.addEventListener("click", () => {
-  let cards = Array.from(document.querySelectorAll(".game-card"));
-  const hiding = toggleAllBtn.textContent === "Hide All";
-
-  // reverse order if hiding
-  if (hiding) {
-    cards = cards.reverse();
-  }
-
-  cards.forEach((card, index) => {
-    setTimeout(() => {
-      if (hiding) {
-        card.classList.add("hidden");  // slide-down
-      } else {
-        card.classList.remove("hidden"); // slide-up
-      }
-    }, index * 200); // stagger
-  });
-
-  toggleAllBtn.textContent = hiding ? "Show All" : "Hide All";
-});
 
 // Poll server for control messages
 function pollControlState() {
@@ -177,10 +149,21 @@ function pollControlState() {
     .then(data => {
       if (data.commsAction === 'show') {
         isVisible = true;
-        document.getElementById('games-container').style.display = 'flex';
+        const container = document.getElementById('games-container');
+        container.style.opacity = '0';
+        container.style.display = 'flex';
+        setTimeout(() => {
+          container.style.transition = 'opacity 0.3s ease';
+          container.style.opacity = '1';
+        }, 10);
       } else if (data.commsAction === 'hide') {
         isVisible = false;
-        document.getElementById('games-container').style.display = 'none';
+        const container = document.getElementById('games-container');
+        container.style.transition = 'opacity 0.3s ease';
+        container.style.opacity = '0';
+        setTimeout(() => {
+          container.style.display = 'none';
+        }, 300);
       }
       if (data.totalCards !== undefined && data.totalCards !== totalCards) {
         totalCards = data.totalCards;
@@ -190,15 +173,6 @@ function pollControlState() {
         );
         buildCards();
         refreshAll();
-      }
-      if (data.commsAction === 'hide_all') {
-        const cards = Array.from(document.querySelectorAll(".game-card"));
-        cards.reverse().forEach((card, index) => {
-          setTimeout(() => {
-            card.classList.add("hidden");
-          }, index * 200);
-        });
-        toggleAllBtn.textContent = "Show All";
       }
       if (data.commsAction === 'refresh_all') {
         refreshAll();
