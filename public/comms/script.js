@@ -2,6 +2,7 @@ const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
 let sheetName = 'WWCD';
 let totalCards = 3; // number of cards
 let isVisible = true;
+let lastCommsAction = null; // Track previous state to prevent repeated animations
 
 function generateQueries(count) {
   const baseColumns = ["B", "C", "D", "E", "G"];
@@ -120,46 +121,7 @@ function pollControlState() {
   fetch('/api/control')
     .then(res => res.json())
     .then(data => {
-      if (data.commsAction === 'show') {
-        isVisible = true;
-        const container = document.getElementById('games-container');
-        container.style.display = 'flex';
-        
-        // Slide up animation left to right
-        const cards = Array.from(document.querySelectorAll('.game-card'));
-        cards.forEach((card, index) => {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(50px)';
-          setTimeout(() => {
-            card.style.transition = 'all 0.5s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-          }, index * 150);
-        });
-      } else if (data.commsAction === 'hide') {
-        isVisible = false;
-        const container = document.getElementById('games-container');
-        
-        // Slide down animation right to left
-        const cards = Array.from(document.querySelectorAll('.game-card')).reverse();
-        cards.forEach((card, index) => {
-          setTimeout(() => {
-            card.style.transition = 'all 0.5s ease';
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(50px)';
-          }, index * 150);
-        });
-        
-        setTimeout(() => {
-          container.style.display = 'none';
-          // Reset styles for next show
-          Array.from(document.querySelectorAll('.game-card')).forEach(card => {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-            card.style.transition = 'none';
-          });
-        }, cards.length * 150 + 500);
-      }
+      // Handle totalCards change first
       if (data.totalCards !== undefined && data.totalCards !== totalCards) {
         totalCards = data.totalCards;
         queries = generateQueries(totalCards);
@@ -169,6 +131,54 @@ function pollControlState() {
         buildCards();
         refreshAll();
       }
+
+      // Only animate if commsAction state has changed
+      if (data.commsAction !== lastCommsAction) {
+        lastCommsAction = data.commsAction;
+
+        if (data.commsAction === 'show') {
+          isVisible = true;
+          const container = document.getElementById('games-container');
+          container.style.display = 'flex';
+          
+          // Slide up animation left to right
+          const cards = Array.from(document.querySelectorAll('.game-card'));
+          cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            setTimeout(() => {
+              card.style.transition = 'all 0.5s ease';
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, index * 150);
+          });
+        } else if (data.commsAction === 'hide') {
+          isVisible = false;
+          const container = document.getElementById('games-container');
+          
+          // Slide down animation right to left
+          const cards = Array.from(document.querySelectorAll('.game-card')).reverse();
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.style.transition = 'all 0.5s ease';
+              card.style.opacity = '0';
+              card.style.transform = 'translateY(50px)';
+            }, index * 150);
+          });
+          
+          setTimeout(() => {
+            container.style.display = 'none';
+            // Reset styles for next show
+            Array.from(document.querySelectorAll('.game-card')).forEach(card => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+              card.style.transition = 'none';
+            });
+          }, cards.length * 150 + 500);
+        }
+      }
+
+      // Handle refresh separately (can happen multiple times)
       if (data.commsAction === 'refresh_all') {
         refreshAll();
       }
