@@ -24,7 +24,7 @@ let maxEliminatedTeams = 16;
 
 // 🔥 COMMS STATE
 // Initialize totalCards with a default value, but allow it to be updated dynamically
-let totalCards = 5; // Default value, can be updated via API
+let totalCards = 3; // Default value, can be updated via API
 let commsOffset = 0;
 
 /* =========================
