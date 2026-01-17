@@ -5,7 +5,7 @@ const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
 let sheetName = 'WWCD';
 
 // Default fallback (will be overridden by controller)
-let totalCards = 3;
+let totalCards = 5;
 
 let isVisible = true;
 let lastCommsAction = null;
@@ -228,7 +228,7 @@ function sendTotalCards(val) {
     alert('Enter a number');
     return;
   }
-  const cappedVal = Math.min(parseInt(val), 15); // Cap at maximum 5
+  const cappedVal = Math.min(parseInt(val), 5); // Cap at maximum 5
   post({ action: 'set_total_cards', value: cappedVal }).then(() => {
     // Fetch updated totalCards from the backend
     fetch('/api/control')
