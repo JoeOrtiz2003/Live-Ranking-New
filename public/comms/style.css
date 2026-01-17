@@ -157,7 +157,7 @@ body {
   font-family: 'Agency Gothic CT Bold';
   font-size: 35px;
   text-transform: uppercase;
-  
+  text-align: center; /* Center align the text */
 }
 
 .total {

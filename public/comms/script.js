@@ -5,7 +5,7 @@ const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
 let sheetName = 'WWCD';
 
 // Default fallback (will be overridden by controller)
-let totalCards = 5;
+let totalCards = 3;
 
 let isVisible = true;
 let lastCommsAction = null;
