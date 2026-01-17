@@ -145,7 +145,68 @@ function pollControlState() {
         refreshAll();
       }
 
-      // Only animate if commsAction state has changed
+      // Always trigger animations for comms_next and comms_previous
+      if (data.commsAction === 'next') {
+        lastCommsAction = data.commsAction;
+        const container = document.getElementById('games-container');
+        const cards = Array.from(document.querySelectorAll('.game-card'));
+
+        cards.forEach((card, index) => {
+          setTimeout(() => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'translateX(-100px)';
+          }, index * 100);
+        });
+
+        setTimeout(() => {
+          buildCards();
+          refreshAll();
+          // Reset to initial state for new cards
+          const newCards = Array.from(document.querySelectorAll('.game-card'));
+          newCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateX(100px)';
+            card.style.transition = 'none';
+            setTimeout(() => {
+              card.style.transition = 'all 0.5s ease';
+              card.style.opacity = '1';
+              card.style.transform = 'translateX(0)';
+            }, 10 + index * 100);
+          });
+        }, cards.length * 100 + 200);
+      } else if (data.commsAction === 'previous') {
+        lastCommsAction = data.commsAction;
+        const container = document.getElementById('games-container');
+        const cards = Array.from(document.querySelectorAll('.game-card'));
+
+        cards.forEach((card, index) => {
+          setTimeout(() => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'translateX(100px)';
+          }, index * 100);
+        });
+
+        setTimeout(() => {
+          buildCards();
+          refreshAll();
+          // Reset to initial state for new cards
+          const newCards = Array.from(document.querySelectorAll('.game-card'));
+          newCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateX(-100px)';
+            card.style.transition = 'none';
+            setTimeout(() => {
+              card.style.transition = 'all 0.5s ease';
+              card.style.opacity = '1';
+              card.style.transform = 'translateX(0)';
+            }, 10 + index * 100);
+          });
+        }, cards.length * 100 + 200);
+      }
+
+      // Only animate if commsAction state has changed for other actions
       if (data.commsAction !== lastCommsAction) {
         lastCommsAction = data.commsAction;
 
@@ -189,64 +250,6 @@ function pollControlState() {
               card.style.transition = 'none';
             });
           }, cards.length * 150 + 500);
-        } else if (data.commsAction === 'next') {
-          // Slide left animation for next
-          const container = document.getElementById('games-container');
-          const cards = Array.from(document.querySelectorAll('.game-card'));
-          
-          cards.forEach((card, index) => {
-            setTimeout(() => {
-              card.style.transition = 'all 0.5s ease';
-              card.style.opacity = '0';
-              card.style.transform = 'translateX(-100px)';
-            }, index * 100);
-          });
-          
-          setTimeout(() => {
-            buildCards();
-            refreshAll();
-            // Reset to initial state for new cards
-            const newCards = Array.from(document.querySelectorAll('.game-card'));
-            newCards.forEach((card, index) => {
-              card.style.opacity = '0';
-              card.style.transform = 'translateX(100px)';
-              card.style.transition = 'none';
-              setTimeout(() => {
-                card.style.transition = 'all 0.5s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateX(0)';
-              }, 10 + index * 100);
-            });
-          }, cards.length * 100 + 200);
-        } else if (data.commsAction === 'previous') {
-          // Slide right animation for previous
-          const container = document.getElementById('games-container');
-          const cards = Array.from(document.querySelectorAll('.game-card'));
-          
-          cards.forEach((card, index) => {
-            setTimeout(() => {
-              card.style.transition = 'all 0.5s ease';
-              card.style.opacity = '0';
-              card.style.transform = 'translateX(100px)';
-            }, index * 100);
-          });
-          
-          setTimeout(() => {
-            buildCards();
-            refreshAll();
-            // Reset to initial state for new cards
-            const newCards = Array.from(document.querySelectorAll('.game-card'));
-            newCards.forEach((card, index) => {
-              card.style.opacity = '0';
-              card.style.transform = 'translateX(-100px)';
-              card.style.transition = 'none';
-              setTimeout(() => {
-                card.style.transition = 'all 0.5s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateX(0)';
-              }, 10 + index * 100);
-            });
-          }, cards.length * 100 + 200);
         }
       }
 

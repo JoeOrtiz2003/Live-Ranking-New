@@ -12,7 +12,7 @@ let scrollQueue = []; // Use a queue for scroll directions
 let killedAction = "show"; // show/hide for killed animation
 let commsAction = "show"; // show/hide for comms
 let maxEliminatedTeams = 16;
-let totalCards = 5;
+let totalCards = 3;
 let commsOffset = 0; // Track current offset for pagination
 
 app.use(cors());
