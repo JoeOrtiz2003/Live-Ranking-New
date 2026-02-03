@@ -202,7 +202,8 @@
         .then(() => {
           console.log('Game action sent successfully:', { action, game });
           try {
-            new BroadcastChannel(channel).postMessage({ game });
+            const bc = new BroadcastChannel(channel);
+            bc.postMessage({ game });
             console.log('Broadcasted to channel:', channel, 'with game:', game);
           } catch (e) {
             console.error('Error broadcasting to channel:', channel, e);

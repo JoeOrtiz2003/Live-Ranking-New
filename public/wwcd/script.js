@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       if (data.action === 'wwcd' && data.game) {
         sheetName = data.game;
+        console.log('Updated sheetName to:', sheetName); // Log the updated sheetName
       }
     } catch (e) {
       console.error('Failed to fetch WWCD game:', e);
@@ -135,6 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const bc = new BroadcastChannel('wwcd_channel');
   bc.onmessage = (event) => {
     if (event.data && event.data.game) {
+      console.log('Received message on wwcd_channel:', event.data); // Log received message
       // Immediately fetch and render new data
       fetchAndRender();
     }
