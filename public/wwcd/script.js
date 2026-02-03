@@ -133,14 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Set interval to fetch every 10 seconds (10000 ms)
   setInterval(fetchAndRender, 10000);
 
-  const bc = new BroadcastChannel('wwcd_channel');
-  bc.onmessage = (event) => {
-    if (event.data && event.data.game) {
-      console.log('Received message on wwcd_channel:', event.data); // Log received message
-      sheetName = event.data.game; // Update sheetName with the received game
-      console.log('Updated sheetName to:', sheetName);
-      // Immediately fetch and render new data
-      fetchAndRender();
-    }
-  };
+  // Remove BroadcastChannel logic and rely on periodic polling
+  console.log('BroadcastChannel removed. Using periodic polling for updates.');
 });
