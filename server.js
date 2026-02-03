@@ -17,7 +17,8 @@ let matchRankingGame = "Game 1";
 
 let scrollQueue = [];
 
-let killedAction = "refresh"; // Default to refresh
+let killedAction = "show";
+let commsAction = "show";
 
 let maxEliminatedTeams = 16;
 
@@ -69,7 +70,7 @@ app.get('/api/control', (req, res) => {
 app.post('/api/control', (req, res) => {
   const { action, game, direction, value } = req.body;
 
-  // BASIC SHOW / HIDE / REFRESH
+  // BASIC SHOW / HIDE
   if (["show", "hide", "refresh", "scoreboard_show", "scoreboard_hide"].includes(action)) {
     controlState = { action, timestamp: Date.now() };
     return res.json({ success: true });
@@ -101,15 +102,14 @@ app.post('/api/control', (req, res) => {
   }
 
   // KILLED
-  if (action === "refresh") {
-    console.log("Received refresh action");
-    try {
-      killedAction = "refresh";
-      return res.json({ success: true });
-    } catch (error) {
-      console.error("Error processing refresh action:", error);
-      return res.status(500).json({ error: "Internal server error" });
-    }
+  if (action === "killed_show") {
+    killedAction = "show";
+    return res.json({ success: true });
+  }
+
+  if (action === "killed_hide") {
+    killedAction = "hide";
+    return res.json({ success: true });
   }
 
   // COMMS VISIBILITY
@@ -143,15 +143,8 @@ app.post('/api/control', (req, res) => {
 
   // SETTINGS
   if (action === "set_max_eliminated" && value !== undefined) {
-    console.log("Received set_max_eliminated action with value:", value);
-    try {
-      maxEliminatedTeams = parseInt(value);
-      console.log("Updated maxEliminatedTeams to:", maxEliminatedTeams);
-      return res.json({ success: true });
-    } catch (error) {
-      console.error("Error processing set_max_eliminated action:", error);
-      return res.status(500).json({ error: "Internal server error" });
-    }
+    maxEliminatedTeams = parseInt(value);
+    return res.json({ success: true });
   }
 
   // 🔥 IMPORTANT FIX
