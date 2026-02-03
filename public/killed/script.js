@@ -158,6 +158,9 @@ function pollServerUpdates() {
     .catch(err => console.error('Error polling server updates:', err));
 }
 
+// Added periodic polling to ensure killed_refresh is detected even if the button is not clicked.
+setInterval(pollServerUpdates, 5000); // Poll every 5 seconds
+
 // Removed the setInterval for pollServerUpdates
 // Added an event listener for a button to trigger pollServerUpdates
 
