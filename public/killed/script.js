@@ -168,6 +168,14 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
 
+  // Add event listener for the WWCD button to trigger pollServerUpdates
+  const wwcdButton = document.getElementById("wwcdButton");
+  if (wwcdButton) {
+    wwcdButton.addEventListener("click", () => {
+      pollServerUpdates();
+    });
+  }
+
   // Add event listener for the Killed Refresh button to trigger pollServerUpdates
   const killedRefreshButton = document.getElementById("killedRefreshButton");
   if (killedRefreshButton) {
