@@ -130,32 +130,23 @@ function fetchTeamDataAndAnimate() {
 }
 
 function refreshPage() {
-  console.log("refreshPage function called. Reloading page with cache-busting..."); // Debugging log
-  const url = new URL(window.location.href);
-  url.searchParams.set('t', Date.now()); // Add cache-busting parameter
-  console.log("New URL for refresh:", url.toString()); // Debugging log
-  window.location.href = url.toString(); // Force page reload
+  console.log("Refreshing page immediately..."); // Debugging log
+  window.location.href = window.location.href; // Force page reload
 }
 
 function pollServerUpdates() {
-  if (isAnimating) {
-    console.log("Skipping pollServerUpdates because an animation is in progress."); // Debugging log
-    return; // Avoid conflicts with ongoing animations
-  }
+  if (isAnimating) return; // Avoid conflicts with ongoing animations
 
   console.log("Polling server updates..."); // Debugging log
 
   fetch('/api/control')
-    .then(res => {
-      console.log("Received response from server:", res); // Debugging log
-      return res.json();
-    })
+    .then(res => res.json())
     .then(data => {
-      console.log('Server response data:', data); // Debugging log to check server response
+      console.log('Server response:', data); // Debugging log to check server response
 
       // Check for killed_refresh action
       if (data.action === 'killed_refresh') {
-        console.log('killed_refresh action detected, calling refreshPage'); // Debugging log
+        console.log('killed_refresh action detected, refreshing page'); // Debugging log
         refreshPage();
       } else {
         console.log('No killed_refresh action detected. Current action:', data.action); // Additional debugging log
@@ -174,16 +165,15 @@ function pollServerUpdates() {
 // Added an event listener for a button to trigger pollServerUpdates
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOMContentLoaded event fired. Adding event listener to killedRefreshButton."); // Debugging log
+  fetchTeamDataAndAnimate();
+  setInterval(fetchTeamDataAndAnimate, fetchInterval);
 
+
+  // Add event listener for the Killed Refresh button to trigger pollServerUpdates
   const killedRefreshButton = document.getElementById("killedRefreshButton");
   if (killedRefreshButton) {
-    console.log("killedRefreshButton found. Adding click event listener."); // Debugging log
     killedRefreshButton.addEventListener("click", () => {
-      console.log("killedRefreshButton clicked. Calling pollServerUpdates."); // Debugging log
       pollServerUpdates();
     });
-  } else {
-    console.error("killedRefreshButton not found in the DOM."); // Debugging log
   }
 });
