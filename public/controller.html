@@ -102,7 +102,8 @@
       <h2 id="killedTitle">Killed Animation</h2>
       <div class="controls">
         <div class="row" style="width:100%">
-          <button class="btn primary" onclick="sendAction('refresh')">Refresh</button>
+          <button class="btn primary" onclick="sendAction('killed_show')">Show</button>
+          <button class="btn ghost" onclick="sendAction('killed_hide')">Hide</button>
         </div>
         <label class="muted" for="maxEliminated">Max Eliminated Teams:</label>
         <div class="row">
@@ -210,16 +211,8 @@
 
     function sendMaxEliminated(){
       const val = document.getElementById('maxEliminated').value;
-      if(!val){
-        alert('Enter a number');
-        console.error('No value entered for max eliminated teams');
-        return;
-      }
-      const parsedVal = parseInt(val);
-      console.log('Sending max eliminated teams:', parsedVal);
-      post({action:'set_max_eliminated',value:parsedVal})
-        .then(() => console.log('Max eliminated teams updated successfully'))
-        .catch(err => console.error('Error updating max eliminated teams:', err));
+      if(!val){ return alert('Enter a number'); }
+      post({action:'set_max_eliminated',value:parseInt(val)});
     }
 
     function sendTotalCards() {
@@ -253,21 +246,14 @@
       post({ action });
       flashButton(action);
 
-      // Trigger refreshKilledAnimation when refresh is pressed
-      if (action === 'refresh') {
-        fetch('/api/control')
-          .then(res => {
-            if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-          })
-          .then(data => {
-            if (data.killedAction === 'refresh') {
-              refreshKilledAnimation();
-            }
-          })
-          .catch(err => console.error('Error handling refresh action:', err));
+      // Trigger sendTotalCards when comms_show is pressed
+      if (action === 'comms_show') {
+        // Do not reset currentOffset when showing comms
+        handleCommsAction('show');
+      }
+
+      if (action === 'comms_hide') {
+        handleCommsAction('hide');
       }
     }
 
