@@ -137,32 +137,32 @@ function refreshPage() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOMContentLoaded event fired"); // Debugging log
+  console.log("DOMContentLoaded event fired");
 
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
 
-  // Assign the Killed Refresh button to the global variable
   killedRefreshButton = document.getElementById("killedRefreshButton");
-  console.log("killedRefreshButton:", killedRefreshButton); // Debugging log
+  console.log("killedRefreshButton:", killedRefreshButton);
 
-  if (killedRefreshButton) {
-    killedRefreshButton.addEventListener("click", () => {
-      console.log("Killed Refresh button clicked"); // Debugging log
-
-      fetch('/api/control', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'killed_refresh' })
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Server response:', data); // Debugging log
-          fetchTeamDataAndAnimate(); // Trigger fetch and animation on button click
-        })
-        .catch(error => console.error('Error:', error));
-    });
-  } else {
-    console.error("killedRefreshButton not found in the DOM"); // Debugging log
+  if (!killedRefreshButton) {
+    console.error("killedRefreshButton not found in the DOM");
+    return;
   }
+
+  killedRefreshButton.addEventListener("click", () => {
+    console.log("Killed Refresh button clicked");
+
+    fetch('/api/control', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'killed_refresh' })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Server response:", data);
+        fetchTeamDataAndAnimate();
+      })
+      .catch(err => console.error("Error:", err));
+  });
 });
