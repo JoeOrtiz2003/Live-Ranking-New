@@ -7,7 +7,7 @@ let MAX_ELIMINATED_TEAMS = 16;
 const lastAliveStatus = new Map();
 const shownEliminatedTags = new Set();
 let isAnimating = false;
-let isVisible = true;
+let isVisible = true; // Default to visible
 
 function getQuery() {
   return encodeURIComponent(`SELECT I, E, F, G, J LIMIT 24 OFFSET 0`);
@@ -129,18 +129,21 @@ function fetchTeamDataAndAnimate() {
     });
 }
 
+function refreshKilledAnimation() {
+  const wrapper = document.getElementById('wrapper');
+  wrapper.innerHTML = ''; // Clear the current content
+  shownEliminatedTags.clear();
+  lastAliveStatus.clear();
+  fetchTeamDataAndAnimate(); // Re-fetch and re-animate
+}
+
 // Listen for control messages from the server
 function pollControlState() {
   fetch('/api/control')
     .then(res => res.json())
     .then(data => {
-      if (data.killedAction === 'show') {
-        isVisible = true;
-      } else if (data.killedAction === 'hide') {
-        isVisible = false;
-        document.getElementById('wrapper').innerHTML = '';
-        shownEliminatedTags.clear();
-        lastAliveStatus.clear();
+      if (data.killedAction === 'refresh') {
+        refreshKilledAnimation();
       }
       if (data.maxEliminatedTeams !== undefined) {
         MAX_ELIMINATED_TEAMS = data.maxEliminatedTeams;

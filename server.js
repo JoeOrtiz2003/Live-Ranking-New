@@ -17,8 +17,7 @@ let matchRankingGame = "Game 1";
 
 let scrollQueue = [];
 
-let killedAction = "show";
-let commsAction = "show";
+let killedAction = "refresh"; // Default to refresh
 
 let maxEliminatedTeams = 16;
 
@@ -70,7 +69,7 @@ app.get('/api/control', (req, res) => {
 app.post('/api/control', (req, res) => {
   const { action, game, direction, value } = req.body;
 
-  // BASIC SHOW / HIDE
+  // BASIC SHOW / HIDE / REFRESH
   if (["show", "hide", "refresh", "scoreboard_show", "scoreboard_hide"].includes(action)) {
     controlState = { action, timestamp: Date.now() };
     return res.json({ success: true });
@@ -102,13 +101,8 @@ app.post('/api/control', (req, res) => {
   }
 
   // KILLED
-  if (action === "killed_show") {
-    killedAction = "show";
-    return res.json({ success: true });
-  }
-
-  if (action === "killed_hide") {
-    killedAction = "hide";
+  if (action === "refresh") {
+    killedAction = "refresh";
     return res.json({ success: true });
   }
 
