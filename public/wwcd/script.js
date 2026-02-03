@@ -6,9 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch('/api/control');
       const data = await res.json();
+      console.log('Response from /api/control:', data); // Log the response
       if (data.action === 'wwcd' && data.game) {
         sheetName = data.game;
         console.log('Updated sheetName to:', sheetName); // Log the updated sheetName
+      } else {
+        console.warn('No valid game data received from /api/control:', data);
       }
     } catch (e) {
       console.error('Failed to fetch WWCD game:', e);
@@ -135,12 +138,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const bc = new BroadcastChannel('wwcd_channel');
   bc.onmessage = (event) => {
+    console.log('Received message on wwcd_channel:', event.data); // Log received message
     if (event.data && event.data.game) {
-      console.log('Received message on wwcd_channel:', event.data); // Log received message
       sheetName = event.data.game; // Update sheetName with the received game
       console.log('Updated sheetName to:', sheetName);
       // Immediately fetch and render new data
       fetchAndRender();
+    } else {
+      console.warn('Invalid message received on wwcd_channel:', event.data);
     }
   };
 });
