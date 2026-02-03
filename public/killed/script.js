@@ -145,6 +145,8 @@ function pollServerUpdates() {
       if (data.action === 'killed_refresh') {
         console.log('killed_refresh action detected, refreshing page'); // Debugging log
         refreshPage();
+      } else {
+        console.log('No killed_refresh action detected. Current action:', data.action); // Additional debugging log
       }
 
       // Update MAX_ELIMINATED_TEAMS if it has changed

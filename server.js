@@ -14,11 +14,8 @@ let controlState = { action: "show", timestamp: Date.now() };
 let wwcdGame = "Game 1";
 let killsGame = "Game 1";
 let matchRankingGame = "Game 1";
-
-let scrollQueue = [];
-
-let killedAction = "show";
 let commsAction = "show";
+let scrollQueue = [];
 
 let maxEliminatedTeams = 16;
 
@@ -49,12 +46,10 @@ app.get('/api/control', (req, res) => {
     wwcdGame,
     killsGame,
     matchRankingGame,
-
+    commsAction,
     scrollDirection: nextScroll,
 
-    killedAction,
-    commsAction,
-
+    // KILLED
     maxEliminatedTeams,
 
     // 🔥 COMMS DATA
@@ -103,16 +98,6 @@ app.post('/api/control', (req, res) => {
   }
 
   // KILLED
-  if (action === "killed_show") {
-    killedAction = "show";
-    return res.json({ success: true });
-  }
-
-  if (action === "killed_hide") {
-    killedAction = "hide";
-    return res.json({ success: true });
-  }
-
   if (action === "killed_refresh") {
     controlState = { action, timestamp: Date.now() };
     return res.json({ success: true, message: "Killed page refreshed" });
