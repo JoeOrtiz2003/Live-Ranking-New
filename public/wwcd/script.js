@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch('/api/control');
       const data = await res.json();
-      if (data.action === 'wwcd_channel' && data.game) {
+      if (data.action === 'wwcd' && data.game) {
         sheetName = data.game;
         console.log('Updated sheetName to:', sheetName); // Log the updated sheetName
       }
