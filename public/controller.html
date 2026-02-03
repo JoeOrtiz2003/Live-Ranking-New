@@ -248,7 +248,12 @@
       // Trigger refreshKilledAnimation when refresh is pressed
       if (action === 'refresh') {
         fetch('/api/control')
-          .then(res => res.json())
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+          })
           .then(data => {
             if (data.killedAction === 'refresh') {
               refreshKilledAnimation();
