@@ -14,6 +14,55 @@
     --font: Norwester;
   }
   
+@font-face {
+    font-family: "Anton-Regular";
+    src: url("../fonts/Anton-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Roboto-Regular";
+    src: url("../fonts/Roboto-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Oswald-SemiBold";
+    src: url("../fonts/Oswald-SemiBold.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Oswald-Regular";
+    src: url("../fonts/Oswald-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "agencygothicct_condensed";
+    src: url("../fonts/agencygothicct_condensed.otf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Agency Gothic CT Bold";
+    src: url("../fonts/Agency Gothic CT Bold.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "agencygothicct_medium";
+    src: url("../fonts/agencygothicct_medium.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
  #innerWrapper {
   display: flex;
   position: absolute;
@@ -37,7 +86,7 @@
   margin: 0;                /* Remove default <p> margin */
   padding: 12px 20px;       /* Reduce padding to minimize space */
   color: var(--header-color);
-  font-family: var(--font);
+  font-family: 'Agency Gothic CT Bold';
   font-size: 36px;
   line-height: 1;           /* Tighter vertical spacing */
   text-transform: uppercase;
@@ -80,6 +129,7 @@
     line-height: 28px;
     font-size: 24px;
     white-space: nowrap;
+    font-family: 'Oswald-Regular';
   
     /* Center the text */
     flex: 1;
@@ -104,5 +154,7 @@
     line-height: 28px;
     font-size: 24px;
     white-space: nowrap;
+    font-family: 'Oswald-Regular';
   }
+  
   
