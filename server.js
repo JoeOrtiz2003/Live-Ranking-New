@@ -99,7 +99,7 @@ app.post('/api/control', (req, res) => {
   // KILLED
   if (action === "killed_refresh") {
     controlState = { action, timestamp: Date.now() };
-    return res.json({ success: true, message: "Killed page refreshed" });
+    return res.json({ success: true, action, message: "Killed page refreshed" });
   }
 
   // COMMS VISIBILITY
