@@ -158,28 +158,16 @@ function pollServerUpdates() {
     .catch(err => console.error('Error polling server updates:', err));
 }
 
-// Added periodic polling to ensure killed_refresh is detected even if the button is not clicked.
-setInterval(pollServerUpdates, 5000); // Poll every 5 seconds
-
-// Removed the setInterval for pollServerUpdates
-// Added an event listener for a button to trigger pollServerUpdates
-
+// Removed periodic polling and ensured the action is triggered only by the button click.
 document.addEventListener("DOMContentLoaded", () => {
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
 
-  // Add event listener for the WWCD button to trigger pollServerUpdates
-  const wwcdButton = document.getElementById("wwcdButton");
-  if (wwcdButton) {
-    wwcdButton.addEventListener("click", () => {
-      pollServerUpdates();
-    });
-  }
-
-  // Add event listener for the Killed Refresh button to trigger pollServerUpdates
+  // Add event listener for the killedRefreshButton to trigger pollServerUpdates
   const killedRefreshButton = document.getElementById("killedRefreshButton");
   if (killedRefreshButton) {
     killedRefreshButton.addEventListener("click", () => {
+      console.log("killedRefreshButton clicked, triggering pollServerUpdates"); // Debugging log
       pollServerUpdates();
     });
   }
