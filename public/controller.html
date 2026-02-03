@@ -218,18 +218,16 @@
         .then(() => {
           console.log('Game action sent successfully:', { action, game });
           try {
-            if (!window.BroadcastChannel) {
-              console.error('BroadcastChannel API is not supported in this environment.');
-              return;
+            // Use postMessage for OBS compatibility
+            const obsIframe = document.querySelector('iframe'); // Ensure the OBS iframe is selected
+            if (obsIframe && obsIframe.contentWindow) {
+              obsIframe.contentWindow.postMessage({ action, game }, '*');
+              console.log('Message sent to OBS iframe:', { action, game });
+            } else {
+              console.error('OBS iframe not found or contentWindow is not accessible.');
             }
-            const bc = new BroadcastChannel(channel);
-            bc.postMessage({ game });
-            console.log('Broadcasted to channel:', channel, 'with game:', game);
-
-            // Additional logging for debugging
-            console.log(`BroadcastChannel '${channel}' is active. Sent game: ${game}`);
           } catch (e) {
-            console.error('Error broadcasting to channel:', channel, e);
+            console.error('Error sending message to OBS iframe:', e);
           }
         })
         .catch(err => console.error('Error sending game action:', err));
