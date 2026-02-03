@@ -133,8 +133,10 @@ function refreshPage() {
   location.reload(); // Reloads the current page
 }
 
-// Periodically check for updates from the server
+// Smooth transition for pollServerUpdates
 function pollServerUpdates() {
+  if (isAnimating) return; // Avoid conflicts with ongoing animations
+
   fetch('/api/control')
     .then(res => res.json())
     .then(data => {
@@ -155,5 +157,5 @@ function pollServerUpdates() {
 document.addEventListener("DOMContentLoaded", () => {
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
-  setInterval(pollServerUpdates, 1000); // Poll server for updates
+  setInterval(pollServerUpdates, 500); // Poll server for updates
 });
