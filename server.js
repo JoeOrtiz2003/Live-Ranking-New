@@ -57,7 +57,7 @@ app.get('/api/control', (req, res) => {
 });
 
 /* =========================
-   POST CONTROL ACTIONS
+   POST CONTROL ACTION
 ========================= */
 
 app.post('/api/control', (req, res) => {
