@@ -98,6 +98,7 @@ app.post('/api/control', (req, res) => {
 
   // KILLED
   if (action === "killed_refresh") {
+    console.log("Received killed_refresh action from client."); // Debugging log
     controlState = { action, timestamp: Date.now() };
     return res.json({ success: true, action, message: "Killed page refreshed" });
   }
