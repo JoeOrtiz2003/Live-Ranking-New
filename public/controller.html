@@ -179,20 +179,37 @@
     const API = "/api/control";
     const post = data => fetch(API, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(e=>console.warn('post failed',e));
 
-    function populate(id,max=15){
-      const el=document.getElementById(id);
-      el.innerHTML='';
-      const placeholder=document.createElement('option'); placeholder.value=''; placeholder.textContent='Select Game'; el.appendChild(placeholder);
-      for(let i=1;i<=max;i++){ const opt=document.createElement('option'); opt.value=`Game ${i}`; opt.textContent=`Game ${i}`; el.appendChild(opt); }
+    function populate(id, max = 15) {
+      const el = document.getElementById(id);
+      if (!el) {
+        console.error(`Element with id '${id}' not found.`);
+        return;
+      }
+      el.innerHTML = '';
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = 'Select Game';
+      el.appendChild(placeholder);
+      for (let i = 1; i <= max; i++) {
+        const opt = document.createElement('option');
+        opt.value = `Game ${i}`;
+        opt.textContent = `Game ${i}`;
+        el.appendChild(opt);
+      }
+      console.log(`Dropdown with id '${id}' populated with ${max} games.`);
     }
 
     function sendAction(action){ post({action}); flashButton(action); }
 
-    function sendGame(action, channel, selectId){
-      const sel=document.getElementById(selectId);
-      const game=sel.value;
+    function sendGame(action, channel, selectId) {
+      const sel = document.getElementById(selectId);
+      if (!sel) {
+        console.error(`Element with id '${selectId}' not found.`);
+        return;
+      }
+      const game = sel.value;
       if (!game) {
-        alert('Select a game first');
+        alert('Please select a game first.');
         console.error('No game selected for action:', action);
         return;
       }
@@ -201,9 +218,16 @@
         .then(() => {
           console.log('Game action sent successfully:', { action, game });
           try {
+            if (!window.BroadcastChannel) {
+              console.error('BroadcastChannel API is not supported in this environment.');
+              return;
+            }
             const bc = new BroadcastChannel(channel);
             bc.postMessage({ game });
             console.log('Broadcasted to channel:', channel, 'with game:', game);
+
+            // Additional logging for debugging
+            console.log(`BroadcastChannel '${channel}' is active. Sent game: ${game}`);
           } catch (e) {
             console.error('Error broadcasting to channel:', channel, e);
           }
