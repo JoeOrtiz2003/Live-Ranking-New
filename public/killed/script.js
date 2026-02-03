@@ -159,7 +159,7 @@ function pollServerUpdates() {
 }
 
 // Added periodic polling to ensure killed_refresh is detected even if the button is not clicked.
-setInterval(pollServerUpdates, 1000000); // Poll every 5 seconds
+setInterval(pollServerUpdates, 50000); // Poll every 5 seconds
 
 // Removed the setInterval for pollServerUpdates
 // Added an event listener for a button to trigger pollServerUpdates
