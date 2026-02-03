@@ -155,5 +155,5 @@ function pollServerUpdates() {
 document.addEventListener("DOMContentLoaded", () => {
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
-  setInterval(pollServerUpdates, 500); // Poll server for updates
+  setInterval(pollServerUpdates, 1000); // Poll server for updates
 });
