@@ -42,6 +42,7 @@ app.get('/api/control', (req, res) => {
     action: controlState.action,
     timestamp: controlState.timestamp,
     wwcdGame,
+    game: wwcdGame,
     killsGame,
     matchRankingGame,
     commsAction,
