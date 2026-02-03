@@ -105,7 +105,8 @@ app.post('/api/control', (req, res) => {
     console.log("Received refresh action");
     try {
       killedAction = "refresh";
-      return res.json({ success: true });
+      console.log("Updated killedAction to refresh");
+      return res.json({ success: true, message: "Refresh action processed successfully" });
     } catch (error) {
       console.error("Error processing refresh action:", error);
       return res.status(500).json({ error: "Internal server error" });
@@ -143,8 +144,15 @@ app.post('/api/control', (req, res) => {
 
   // SETTINGS
   if (action === "set_max_eliminated" && value !== undefined) {
-    maxEliminatedTeams = parseInt(value);
-    return res.json({ success: true });
+    console.log("Received set_max_eliminated action with value:", value);
+    try {
+      maxEliminatedTeams = parseInt(value);
+      console.log("Updated maxEliminatedTeams to:", maxEliminatedTeams);
+      return res.json({ success: true });
+    } catch (error) {
+      console.error("Error processing set_max_eliminated action:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
   }
 
   // 🔥 IMPORTANT FIX

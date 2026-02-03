@@ -210,8 +210,16 @@
 
     function sendMaxEliminated(){
       const val = document.getElementById('maxEliminated').value;
-      if(!val){ return alert('Enter a number'); }
-      post({action:'set_max_eliminated',value:parseInt(val)});
+      if(!val){
+        alert('Enter a number');
+        console.error('No value entered for max eliminated teams');
+        return;
+      }
+      const parsedVal = parseInt(val);
+      console.log('Sending max eliminated teams:', parsedVal);
+      post({action:'set_max_eliminated',value:parsedVal})
+        .then(() => console.log('Max eliminated teams updated successfully'))
+        .catch(err => console.error('Error updating max eliminated teams:', err));
     }
 
     function sendTotalCards() {
@@ -242,25 +250,24 @@
     }
 
     function sendAction(action) {
-      post({ action });
-      flashButton(action);
+      console.log('Sending action:', action); // Log the action being sent
+      post({ action })
+        .then(response => {
+          console.log('Action response:', response);
+          flashButton(action);
 
-      // Trigger refreshKilledAnimation when refresh is pressed
-      if (action === 'refresh') {
-        fetch('/api/control')
-          .then(res => {
-            if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-          })
-          .then(data => {
-            if (data.killedAction === 'refresh') {
-              refreshKilledAnimation();
-            }
-          })
-          .catch(err => console.error('Error handling refresh action:', err));
-      }
+          // Trigger refreshKilledAnimation when refresh is pressed
+          if (action === 'refresh') {
+            console.log('Refresh action triggered');
+            fetch('/api/control')
+              .then(res => res.json())
+              .then(data => {
+                console.log('Control state after refresh:', data);
+              })
+              .catch(err => console.error('Error fetching control state after refresh:', err));
+          }
+        })
+        .catch(err => console.error('Error sending action:', err));
     }
 
     /* INIT */
