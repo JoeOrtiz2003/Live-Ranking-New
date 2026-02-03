@@ -161,7 +161,7 @@ function pollServerUpdates() {
 // Removed periodic polling and ensured the action is triggered only by the button click.
 document.addEventListener("DOMContentLoaded", () => {
   fetchTeamDataAndAnimate();
-  setInterval(fetchTeamDataAndAnimate, fetchInterval);
+  setInterval(fetchTeamDataAndAnimate, fetchInterval,pollServerUpdates);
 
   // Add event listener for the killedRefreshButton to trigger pollServerUpdates
   const killedRefreshButton = document.getElementById("killedRefreshButton");
