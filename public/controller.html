@@ -225,6 +225,9 @@
             const bc = new BroadcastChannel(channel);
             bc.postMessage({ game });
             console.log('Broadcasted to channel:', channel, 'with game:', game);
+
+            // Additional logging for debugging
+            console.log(`BroadcastChannel '${channel}' is active. Sent game: ${game}`);
           } catch (e) {
             console.error('Error broadcasting to channel:', channel, e);
           }
