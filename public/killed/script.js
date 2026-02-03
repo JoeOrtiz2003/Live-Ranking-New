@@ -170,4 +170,12 @@ document.addEventListener("DOMContentLoaded", () => {
       pollServerUpdates();
     });
   }
+
+  // Add event listener for the Killed Refresh button to trigger pollServerUpdates
+  const killedRefreshButton = document.getElementById("killedRefreshButton");
+  if (killedRefreshButton) {
+    killedRefreshButton.addEventListener("click", () => {
+      pollServerUpdates();
+    });
+  }
 });
