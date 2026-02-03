@@ -136,41 +136,20 @@ function refreshPage() {
   window.location.href = window.location.href; // Force page reload
 }
 
-function pollServerUpdates() {
-  if (isAnimating) return; // Avoid conflicts with ongoing animations
-
-  console.log("Polling server updates..."); // Debugging log
-
-  fetch('/api/control')
-    .then(res => res.json())
-    .then(data => {
-      console.log('Server response:', data); // Debugging log to check server response
-
-      // Check for killed_refresh action
-      if (data.action === 'killed_refresh') {
-        console.log('killed_refresh action detected, refreshing page'); // Debugging log
-        refreshPage();
-      } else {
-        console.log('No killed_refresh action detected. Current action:', data.action); // Additional debugging log
-      }
-
-      // Update MAX_ELIMINATED_TEAMS if it has changed
-      if (data.maxEliminatedTeams !== undefined && data.maxEliminatedTeams !== MAX_ELIMINATED_TEAMS) {
-        MAX_ELIMINATED_TEAMS = data.maxEliminatedTeams;
-        console.log('Updated MAX_ELIMINATED_TEAMS:', MAX_ELIMINATED_TEAMS);
-      }
-    })
-    .catch(err => console.error('Error polling server updates:', err));
-}
-
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOMContentLoaded event fired"); // Debugging log
+
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
 
   // Assign the Killed Refresh button to the global variable
   killedRefreshButton = document.getElementById("killedRefreshButton");
+  console.log("killedRefreshButton:", killedRefreshButton); // Debugging log
+
   if (killedRefreshButton) {
     killedRefreshButton.addEventListener("click", () => {
+      console.log("Killed Refresh button clicked"); // Debugging log
+
       fetch('/api/control', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -178,10 +157,12 @@ document.addEventListener("DOMContentLoaded", () => {
       })
         .then(response => response.json())
         .then(data => {
-          console.log('Server response:', data);
+          console.log('Server response:', data); // Debugging log
           fetchTeamDataAndAnimate(); // Optionally call this after the server response
         })
         .catch(error => console.error('Error:', error));
     });
+  } else {
+    console.error("killedRefreshButton not found in the DOM"); // Debugging log
   }
 });
