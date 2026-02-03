@@ -77,7 +77,7 @@ app.post('/api/control', (req, res) => {
   }
 
   // GAME SELECTORS
-  if (action === "wwcdButton" && game) {
+  if (action === "wwcd_refresh" && game) {
     console.log("Received WWCD action with game:", game);
     wwcdGame = game;
     controlState = { action, game, timestamp: Date.now() };

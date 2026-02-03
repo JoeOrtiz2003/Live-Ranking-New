@@ -137,10 +137,10 @@
     <section class="card" aria-labelledby="wwcdTitle">
       <h2 id="wwcdTitle">WWCD</h2>
       <div class="controls">
-        <label class="muted" for="wwcd">Select game</label>
+        <label class="muted" for="wwcdSelect">Select game</label>
         <div class="row">
-          <select id="wwcdButton" aria-label="WWCD game select"></select>
-          <button class="btn primary" onclick="sendGame('wwcd','wwcd_channel','wwcdButton')">Set</button>
+          <select id="wwcdSelect" aria-label="WWCD game select"></select>
+          <button id="wwcdButton" class="btn primary" onclick="sendGame('wwcd','wwcd_channel','wwcdSelect')">Set</button>
         </div>
       </div>
     </section>
@@ -274,7 +274,7 @@
     }
 
     /* INIT */
-    populate('wwcdButton'); populate('kills'); populate('match');
+    populate('wwcdSelect'); populate('kills'); populate('match');
 
     // ...existing code...
     // Optimize: trigger scroll instantly on every keydown (including repeats)
