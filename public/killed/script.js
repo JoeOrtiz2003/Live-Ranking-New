@@ -133,29 +133,18 @@ function refreshPage() {
   location.reload(); // Reloads the current page
 }
 
-// Smooth transition for pollServerUpdates
-function pollServerUpdates() {
-  if (isAnimating) return; // Avoid conflicts with ongoing animations
-
-  fetch('/api/control')
-    .then(res => res.json())
-    .then(data => {
-      // Check for killed_refresh action
-      if (data.action === 'killed_refresh') {
-        refreshPage();
-      }
-
-      // Update MAX_ELIMINATED_TEAMS if it has changed
-      if (data.maxEliminatedTeams !== undefined && data.maxEliminatedTeams !== MAX_ELIMINATED_TEAMS) {
-        MAX_ELIMINATED_TEAMS = data.maxEliminatedTeams;
-        console.log('Updated MAX_ELIMINATED_TEAMS:', MAX_ELIMINATED_TEAMS);
-      }
-    })
-    .catch(err => console.error('Error polling server updates:', err));
-}
+// Removed the setInterval for pollServerUpdates
+// Added an event listener for a button to trigger pollServerUpdates
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
-  setInterval(pollServerUpdates, 500); // Poll server for updates
+
+  // Add event listener for the WWCD button to trigger pollServerUpdates
+  const wwcdButton = document.getElementById("wwcdButton");
+  if (wwcdButton) {
+    wwcdButton.addEventListener("click", () => {
+      pollServerUpdates();
+    });
+  }
 });
