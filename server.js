@@ -2,20 +2,8 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const http = require('http');
-const WebSocket = require('ws');
 
 const app = express();
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server, path: '/ws' });
-
-function broadcastKilledRefresh() {
-  wss.clients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify({ type: 'killed_refresh' }));
-    }
-  });
-}
 
 /* =========================
    GLOBAL STATE
@@ -109,9 +97,8 @@ app.post('/api/control', (req, res) => {
 
   // KILLED
   if (action === "killed_refresh") {
-    console.log("Received killed_refresh action from client.");
+    console.log("Received killed_refresh action from client."); // Debugging log
     controlState = { action, timestamp: Date.now() };
-    broadcastKilledRefresh();
     return res.json({ success: true, action, message: "Killed page refreshed" });
   }
 
@@ -206,6 +193,6 @@ app.get('*', (_, res) => res.redirect('/Controller'));
 ========================= */
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
