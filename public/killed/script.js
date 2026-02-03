@@ -133,17 +133,27 @@ function refreshPage() {
   location.reload(); // Reloads the current page
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  fetchTeamDataAndAnimate();
-  setInterval(fetchTeamDataAndAnimate, fetchInterval);
-
-  // Listen for refresh action
+// Periodically check for updates from the server
+function pollServerUpdates() {
   fetch('/api/control')
     .then(res => res.json())
     .then(data => {
+      // Check for killed_refresh action
       if (data.action === 'killed_refresh') {
         refreshPage();
       }
+
+      // Update MAX_ELIMINATED_TEAMS if it has changed
+      if (data.maxEliminatedTeams !== undefined && data.maxEliminatedTeams !== MAX_ELIMINATED_TEAMS) {
+        MAX_ELIMINATED_TEAMS = data.maxEliminatedTeams;
+        console.log('Updated MAX_ELIMINATED_TEAMS:', MAX_ELIMINATED_TEAMS);
+      }
     })
-    .catch(err => console.error('Error handling refresh action:', err));
+    .catch(err => console.error('Error polling server updates:', err));
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetchTeamDataAndAnimate();
+  setInterval(fetchTeamDataAndAnimate, fetchInterval);
+  setInterval(pollServerUpdates, 500); // Poll server for updates
 });
