@@ -130,10 +130,8 @@ function fetchTeamDataAndAnimate() {
 }
 
 function refreshPage() {
-  console.log("Refreshing page in 3 seconds..."); // Debugging log
-  setTimeout(() => {
-    window.location.href = window.location.href; // Force page reload
-  }, 3000); // 3000 milliseconds = 3 seconds
+  console.log("Refreshing page immediately..."); // Debugging log
+  window.location.href = window.location.href; // Force page reload
 }
 
 function pollServerUpdates() {
