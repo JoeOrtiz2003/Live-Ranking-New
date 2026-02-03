@@ -130,45 +130,45 @@ function fetchTeamDataAndAnimate() {
 }
 
 function refreshPage() {
-  location.reload(); // OBS-safe refresh
+  location.reload(); // Reloads the current page
 }
 
 function pollServerUpdates() {
-  if (isAnimating) return; // prevent refresh during animation
+  if (isAnimating) return; // Avoid conflicts with ongoing animations
 
   fetch('/api/control')
     .then(res => res.json())
     .then(data => {
-      console.log("Server response:", data);
+      console.log('Server response:', data); // Debugging log to check server response
 
-      // If server tells overlay to refresh
+      // Check for killed_refresh action
       if (data.action === 'killed_refresh') {
-        console.log("killed_refresh detected — reloading page");
+        console.log('killed_refresh action detected, refreshing page'); // Debugging log
         refreshPage();
       }
 
-      // Optional: sync MAX_ELIMINATED_TEAMS from server
-      if (
-        data.maxEliminatedTeams !== undefined &&
-        data.maxEliminatedTeams !== MAX_ELIMINATED_TEAMS
-      ) {
+      // Update MAX_ELIMINATED_TEAMS if it has changed
+      if (data.maxEliminatedTeams !== undefined && data.maxEliminatedTeams !== MAX_ELIMINATED_TEAMS) {
         MAX_ELIMINATED_TEAMS = data.maxEliminatedTeams;
-        console.log("MAX_ELIMINATED_TEAMS updated:", MAX_ELIMINATED_TEAMS);
+        console.log('Updated MAX_ELIMINATED_TEAMS:', MAX_ELIMINATED_TEAMS);
       }
     })
-    .catch(err => {
-      console.error("Error polling server:", err);
-    });
+    .catch(err => console.error('Error polling server updates:', err));
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const killedRefreshButton = document.getElementById("killedRefreshButton");
+// Removed the setInterval for pollServerUpdates
+// Added an event listener for a button to trigger pollServerUpdates
 
+document.addEventListener("DOMContentLoaded", () => {
+  fetchTeamDataAndAnimate();
+  setInterval(fetchTeamDataAndAnimate, fetchInterval);
+
+
+  // Add event listener for the Killed Refresh button to trigger pollServerUpdates
+  const killedRefreshButton = document.getElementById("killedRefreshButton");
   if (killedRefreshButton) {
     killedRefreshButton.addEventListener("click", () => {
-      console.log("Killed Refresh button clicked");
       pollServerUpdates();
     });
   }
 });
-

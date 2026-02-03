@@ -16,7 +16,6 @@ let killsGame = "Game 1";
 let matchRankingGame = "Game 1";
 let commsAction = "show";
 let scrollQueue = [];
-
 let maxEliminatedTeams = 16;
 
 // 🔥 COMMS STATE
