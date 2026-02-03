@@ -189,10 +189,26 @@
 
     function sendAction(action){ post({action}); flashButton(action); }
 
-    function sendGame(action,channel,selectId){
+    function sendGame(action, channel, selectId){
       const sel=document.getElementById(selectId);
-      const game=sel.value; if(!game){ return alert('Select a game first'); }
-      post({action,game}).then(()=>{ try{ new BroadcastChannel(channel).postMessage({game}); }catch(e){} });
+      const game=sel.value;
+      if (!game) {
+        alert('Select a game first');
+        console.error('No game selected for action:', action);
+        return;
+      }
+      console.log('Sending game action:', { action, game, channel });
+      post({ action, game })
+        .then(() => {
+          console.log('Game action sent successfully:', { action, game });
+          try {
+            new BroadcastChannel(channel).postMessage({ game });
+            console.log('Broadcasted to channel:', channel, 'with game:', game);
+          } catch (e) {
+            console.error('Error broadcasting to channel:', channel, e);
+          }
+        })
+        .catch(err => console.error('Error sending game action:', err));
     }
 
     function scrollControl(direction){
