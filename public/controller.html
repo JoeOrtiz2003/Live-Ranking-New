@@ -245,14 +245,16 @@
       post({ action });
       flashButton(action);
 
-      // Trigger sendTotalCards when comms_show is pressed
-      if (action === 'comms_show') {
-        // Do not reset currentOffset when showing comms
-        handleCommsAction('show');
-      }
-
-      if (action === 'comms_hide') {
-        handleCommsAction('hide');
+      // Trigger refreshKilledAnimation when refresh is pressed
+      if (action === 'refresh') {
+        fetch('/api/control')
+          .then(res => res.json())
+          .then(data => {
+            if (data.killedAction === 'refresh') {
+              refreshKilledAnimation();
+            }
+          })
+          .catch(err => console.error('Error handling refresh action:', err));
       }
     }
 
