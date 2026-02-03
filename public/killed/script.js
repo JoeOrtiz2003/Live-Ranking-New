@@ -129,28 +129,21 @@ function fetchTeamDataAndAnimate() {
     });
 }
 
-// Listen for control messages from the server
-function pollControlState() {
-  fetch('/api/control')
-    .then(res => res.json())
-    .then(data => {
-      if (data.killedAction === 'show') {
-        isVisible = true;
-      } else if (data.killedAction === 'hide') {
-        isVisible = false;
-        document.getElementById('wrapper').innerHTML = '';
-        shownEliminatedTags.clear();
-        lastAliveStatus.clear();
-      }
-      if (data.maxEliminatedTeams !== undefined) {
-        MAX_ELIMINATED_TEAMS = data.maxEliminatedTeams;
-      }
-    })
-    .catch(err => console.error('Error polling control state:', err));
+function refreshPage() {
+  location.reload(); // Reloads the current page
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
-  setInterval(pollControlState, 500);
+
+  // Listen for refresh action
+  fetch('/api/control')
+    .then(res => res.json())
+    .then(data => {
+      if (data.action === 'killed_refresh') {
+        refreshPage();
+      }
+    })
+    .catch(err => console.error('Error handling refresh action:', err));
 });

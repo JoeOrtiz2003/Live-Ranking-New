@@ -113,6 +113,11 @@ app.post('/api/control', (req, res) => {
     return res.json({ success: true });
   }
 
+  if (action === "killed_refresh") {
+    controlState = { action, timestamp: Date.now() };
+    return res.json({ success: true, message: "Killed page refreshed" });
+  }
+
   // COMMS VISIBILITY
   if (action === "comms_show") {
     commsAction = "show";
@@ -145,6 +150,7 @@ app.post('/api/control', (req, res) => {
   // SETTINGS
   if (action === "set_max_eliminated" && value !== undefined) {
     maxEliminatedTeams = parseInt(value);
+    controlState = { action, value, timestamp: Date.now() };
     return res.json({ success: true });
   }
 
