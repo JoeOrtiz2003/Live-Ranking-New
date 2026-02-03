@@ -150,21 +150,19 @@ document.addEventListener("DOMContentLoaded", () => {
     killedRefreshButton.addEventListener("click", () => {
       console.log("Killed Refresh button clicked"); // Debugging log
 
-      // Add a delay before triggering the fetch and animation
-      setTimeout(() => {
-        fetch('/api/control', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'killed_refresh' })
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Server response:', data); // Debugging log
+      // Trigger page refresh immediately
+      fetch('/api/control', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'killed_refresh' })
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Server response:', data); // Debugging log
 
-            fetchTeamDataAndAnimate(); // Trigger fetch and animation
-          })
-          .catch(error => console.error('Error:', error));
-      }, 2000); // 2-second delay
+          refreshPage(); // Refresh the page immediately
+        })
+        .catch(error => console.error('Error:', error));
     });
   } else {
     console.error("killedRefreshButton not found in the DOM"); // Debugging log
