@@ -133,6 +133,29 @@ function refreshPage() {
   location.reload(); // Reloads the current page
 }
 
+function pollServerUpdates() {
+  if (isAnimating) return; // Avoid conflicts with ongoing animations
+
+  fetch('/api/control')
+    .then(res => res.json())
+    .then(data => {
+      console.log('Server response:', data); // Debugging log to check server response
+
+      // Check for killed_refresh action
+      if (data.action === 'killed_refresh') {
+        console.log('killed_refresh action detected, refreshing page'); // Debugging log
+        refreshPage();
+      }
+
+      // Update MAX_ELIMINATED_TEAMS if it has changed
+      if (data.maxEliminatedTeams !== undefined && data.maxEliminatedTeams !== MAX_ELIMINATED_TEAMS) {
+        MAX_ELIMINATED_TEAMS = data.maxEliminatedTeams;
+        console.log('Updated MAX_ELIMINATED_TEAMS:', MAX_ELIMINATED_TEAMS);
+      }
+    })
+    .catch(err => console.error('Error polling server updates:', err));
+}
+
 // Removed the setInterval for pollServerUpdates
 // Added an event listener for a button to trigger pollServerUpdates
 
