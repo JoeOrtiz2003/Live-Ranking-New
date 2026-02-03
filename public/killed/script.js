@@ -150,7 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
     killedRefreshButton.addEventListener("click", () => {
       console.log("Killed Refresh button clicked"); // Debugging log
 
-      // Trigger page refresh immediately
       fetch('/api/control', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -159,8 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
         .then(data => {
           console.log('Server response:', data); // Debugging log
-
-          refreshPage(); // Refresh the page immediately
+          fetchTeamDataAndAnimate(); // Trigger fetch and animation on button click
         })
         .catch(error => console.error('Error:', error));
     });
