@@ -130,11 +130,14 @@ function fetchTeamDataAndAnimate() {
 }
 
 function refreshPage() {
-  location.reload(); // Reloads the current page
+  console.log("Refreshing page..."); // Debugging log
+  window.location.href = window.location.href; // Force page reload
 }
 
 function pollServerUpdates() {
   if (isAnimating) return; // Avoid conflicts with ongoing animations
+
+  console.log("Polling server updates..."); // Debugging log
 
   fetch('/api/control')
     .then(res => res.json())
@@ -145,6 +148,8 @@ function pollServerUpdates() {
       if (data.action === 'killed_refresh') {
         console.log('killed_refresh action detected, refreshing page'); // Debugging log
         refreshPage();
+      } else {
+        console.log('No killed_refresh action detected. Current action:', data.action); // Additional debugging log
       }
 
       // Update MAX_ELIMINATED_TEAMS if it has changed
