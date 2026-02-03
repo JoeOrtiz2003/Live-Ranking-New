@@ -137,6 +137,8 @@ document.addEventListener("DOMContentLoaded", () => {
   bc.onmessage = (event) => {
     if (event.data && event.data.game) {
       console.log('Received message on wwcd_channel:', event.data); // Log received message
+      sheetName = event.data.game; // Update sheetName with the received game
+      console.log('Updated sheetName to:', sheetName);
       // Immediately fetch and render new data
       fetchAndRender();
     }
