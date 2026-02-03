@@ -73,7 +73,7 @@ app.post('/api/control', (req, res) => {
   if (action === "wwcd_refresh" && game) {
     console.log("Received WWCD action with game:", game);
     wwcdGame = game;
-    controlState = { action, game, timestamp: Date.now() };
+    controlState = { action: "wwcd", game, timestamp: Date.now() };
     return res.json({ success: true, message: "WWCD game set successfully", game });
   }
 
