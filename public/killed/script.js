@@ -168,11 +168,11 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
 
-  // Add event listener for the Killed Refresh button to trigger refreshPage
+  // Add event listener for the Killed Refresh button to trigger fetchTeamDataAndAnimate
   const killedRefreshButton = document.getElementById("killedRefreshButton");
   if (killedRefreshButton) {
     killedRefreshButton.addEventListener("click", () => {
-      refreshPage();
+      fetchTeamDataAndAnimate();
     });
   }
 });
