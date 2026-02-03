@@ -158,7 +158,11 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
         .then(data => {
           console.log('Server response:', data); // Debugging log
-          fetchTeamDataAndAnimate(); // Trigger fetch and animation on button click
+
+          // Add a delay to ensure the server has processed the action
+          setTimeout(() => {
+            fetchTeamDataAndAnimate(); // Trigger fetch and animation after delay
+          }, 2000); // 2-second delay
         })
         .catch(error => console.error('Error:', error));
     });
