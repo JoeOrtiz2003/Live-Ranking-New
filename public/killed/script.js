@@ -130,8 +130,10 @@ function fetchTeamDataAndAnimate() {
 }
 
 function refreshPage() {
-  console.log("Refreshing page immediately..."); // Debugging log
-  window.location.href = window.location.href; // Force page reload
+  console.log("Refreshing page immediately with cache-busting..."); // Debugging log
+  const url = new URL(window.location.href);
+  url.searchParams.set('t', Date.now()); // Add cache-busting parameter
+  window.location.href = url.toString(); // Force page reload
 }
 
 function pollServerUpdates() {
@@ -146,7 +148,7 @@ function pollServerUpdates() {
 
       // Check for killed_refresh action
       if (data.action === 'killed_refresh') {
-        console.log('killed_refresh action detected, refreshing page'); // Debugging log
+        console.log('killed_refresh action detected, calling refreshPage'); // Debugging log
         refreshPage();
       } else {
         console.log('No killed_refresh action detected. Current action:', data.action); // Additional debugging log
