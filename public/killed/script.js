@@ -168,12 +168,11 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
 
-
-  // Add event listener for the Killed Refresh button to trigger pollServerUpdates
+  // Add event listener for the Killed Refresh button to trigger refreshPage
   const killedRefreshButton = document.getElementById("killedRefreshButton");
   if (killedRefreshButton) {
     killedRefreshButton.addEventListener("click", () => {
-      pollServerUpdates();
+      refreshPage();
     });
   }
 });
