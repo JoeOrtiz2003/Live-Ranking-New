@@ -9,6 +9,8 @@ const shownEliminatedTags = new Set();
 let isAnimating = false;
 let isVisible = true;
 
+let killedRefreshButton;
+
 function getQuery() {
   return encodeURIComponent(`SELECT I, E, F, G, J LIMIT 24 OFFSET 0`);
 }
@@ -161,18 +163,25 @@ function pollServerUpdates() {
     .catch(err => console.error('Error polling server updates:', err));
 }
 
-// Removed the setInterval for pollServerUpdates
-// Added an event listener for a button to trigger pollServerUpdates
-
 document.addEventListener("DOMContentLoaded", () => {
   fetchTeamDataAndAnimate();
   setInterval(fetchTeamDataAndAnimate, fetchInterval);
 
-  // Add event listener for the Killed Refresh button to trigger fetchTeamDataAndAnimate
-  const killedRefreshButton = document.getElementById("killedRefreshButton");
+  // Assign the Killed Refresh button to the global variable
+  killedRefreshButton = document.getElementById("killedRefreshButton");
   if (killedRefreshButton) {
     killedRefreshButton.addEventListener("click", () => {
-      fetchTeamDataAndAnimate();
+      fetch('/api/control', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'killed_refresh' })
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Server response:', data);
+          fetchTeamDataAndAnimate(); // Optionally call this after the server response
+        })
+        .catch(error => console.error('Error:', error));
     });
   }
 });
