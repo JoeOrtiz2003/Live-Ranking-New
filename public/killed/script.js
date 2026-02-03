@@ -130,57 +130,45 @@ function fetchTeamDataAndAnimate() {
 }
 
 function refreshPage() {
-  location.reload(); // Reloads the current page
+  location.reload(); // OBS-safe refresh
 }
 
 function pollServerUpdates() {
-  if (isAnimating) return; // Avoid conflicts with ongoing animations
+  if (isAnimating) return; // prevent refresh during animation
 
   fetch('/api/control')
     .then(res => res.json())
     .then(data => {
-      console.log('Server response:', data); // Debugging log to check server response
+      console.log("Server response:", data);
 
-      // Check for killed_refresh action
+      // If server tells overlay to refresh
       if (data.action === 'killed_refresh') {
-        console.log('killed_refresh action detected, refreshing page'); // Debugging log
+        console.log("killed_refresh detected — reloading page");
         refreshPage();
-      } else {
-        console.log('No killed_refresh action detected. Current action:', data.action); // Additional debugging log
       }
 
-      // Update MAX_ELIMINATED_TEAMS if it has changed
-      if (data.maxEliminatedTeams !== undefined && data.maxEliminatedTeams !== MAX_ELIMINATED_TEAMS) {
+      // Optional: sync MAX_ELIMINATED_TEAMS from server
+      if (
+        data.maxEliminatedTeams !== undefined &&
+        data.maxEliminatedTeams !== MAX_ELIMINATED_TEAMS
+      ) {
         MAX_ELIMINATED_TEAMS = data.maxEliminatedTeams;
-        console.log('Updated MAX_ELIMINATED_TEAMS:', MAX_ELIMINATED_TEAMS);
+        console.log("MAX_ELIMINATED_TEAMS updated:", MAX_ELIMINATED_TEAMS);
       }
     })
-    .catch(err => console.error('Error polling server updates:', err));
+    .catch(err => {
+      console.error("Error polling server:", err);
+    });
 }
 
-// Added periodic polling to ensure killed_refresh is detected even if the button is not clicked.
-setInterval(pollServerUpdates, 50000); // Poll every 5 seconds
-
-// Removed the setInterval for pollServerUpdates
-// Added an event listener for a button to trigger pollServerUpdates
-
 document.addEventListener("DOMContentLoaded", () => {
-  fetchTeamDataAndAnimate();
-  setInterval(fetchTeamDataAndAnimate, fetchInterval);
-
-  // Add event listener for the WWCD button to trigger pollServerUpdates
-  const wwcdButton = document.getElementById("wwcdButton");
-  if (wwcdButton) {
-    wwcdButton.addEventListener("click", () => {
-      pollServerUpdates();
-    });
-  }
-
-  // Add event listener for the Killed Refresh button to trigger pollServerUpdates
   const killedRefreshButton = document.getElementById("killedRefreshButton");
+
   if (killedRefreshButton) {
     killedRefreshButton.addEventListener("click", () => {
+      console.log("Killed Refresh button clicked");
       pollServerUpdates();
     });
   }
 });
+
