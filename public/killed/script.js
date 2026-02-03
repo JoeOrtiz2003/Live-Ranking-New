@@ -142,14 +142,11 @@ function pollControlState() {
   fetch('/api/control')
     .then(res => res.json())
     .then(data => {
-      console.log('Polled control state:', data); // Log the control state
       if (data.killedAction === 'refresh') {
-        console.log('Refresh action detected in control state');
         refreshKilledAnimation();
       }
       if (data.maxEliminatedTeams !== undefined) {
         MAX_ELIMINATED_TEAMS = data.maxEliminatedTeams;
-        console.log('Updated MAX_ELIMINATED_TEAMS to:', MAX_ELIMINATED_TEAMS);
       }
     })
     .catch(err => console.error('Error polling control state:', err));

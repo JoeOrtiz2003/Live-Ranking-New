@@ -105,8 +105,7 @@ app.post('/api/control', (req, res) => {
     console.log("Received refresh action");
     try {
       killedAction = "refresh";
-      console.log("Updated killedAction to refresh");
-      return res.json({ success: true, message: "Refresh action processed successfully" });
+      return res.json({ success: true });
     } catch (error) {
       console.error("Error processing refresh action:", error);
       return res.status(500).json({ error: "Internal server error" });
