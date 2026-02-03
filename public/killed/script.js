@@ -136,6 +136,19 @@ function refreshPage() {
   window.location.href = window.location.href; // Force page reload
 }
 
+function pollForKilledRefresh() {
+  setInterval(() => {
+    fetch('/api/control')
+      .then(res => res.json())
+      .then(data => {
+        if (data.action === 'killed_refresh') {
+          // Trigger your refresh logic here
+          fetchTeamDataAndAnimate();
+        }
+      });
+  }, 2000); // Poll every 2 seconds
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOMContentLoaded event fired"); // Debugging log
 
@@ -165,4 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("killedRefreshButton not found in the DOM"); // Debugging log
   }
+
+  pollForKilledRefresh();
 });
