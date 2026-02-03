@@ -71,10 +71,9 @@ app.post('/api/control', (req, res) => {
 
   // GAME SELECTORS
   if (action === "wwcd" && game) {
-    console.log("Received WWCD action with game:", game);
     wwcdGame = game;
-    controlState = { action: "wwcd", game, timestamp: Date.now() };
-    return res.json({ success: true, message: "WWCD game set successfully", game });
+    controlState = { action, game, timestamp: Date.now() };
+    return res.json({ success: true });
   }
 
   if (action === "kills" && game) {
