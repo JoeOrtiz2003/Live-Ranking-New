@@ -1,18 +1,18 @@
 :root {
-  --match-ranking-slogan-color: #041b25;
-  --match-ranking-winner-frame-border-color: #05618b;
-  --match-ranking-winner-frame-shadow-color: #10b0dd;
-  --match-ranking-winner-frame-background-color: #05618b;
+  --match-ranking-slogan-color: #ffffff;
+  --match-ranking-winner-frame-border-color: #771d1d;
+  --match-ranking-winner-frame-shadow-color: #ff0000;
+  --match-ranking-winner-frame-background-color: #771d1d;
   --match-ranking-image-frame-border-color: rgba(255, 0, 0, 0);
   --match-ranking-image-frame-text-color: white;
   --match-ranking-bigger-text-color: white;
   --match-ranking-smaller-text-color: white;
   --match-ranking-divider-color: white;
-  --match-ranking-bracket-header-background-color: #05618b;
-  --match-ranking-bracket-header-shadow-color: #05618b;
+  --match-ranking-bracket-header-background-color: #771d1d;
+  --match-ranking-bracket-header-shadow-color: #771d1d;
   --match-ranking-bracket-header-color: white;
-  --match-ranking-bracket-shadow-color: #05618b;
-  --match-ranking-bracket-background-color: #05618b;
+  --match-ranking-bracket-shadow-color: #771d1d;
+  --match-ranking-bracket-background-color: #771d1d;
   --match-ranking-bracket-color: white;
 }
 
