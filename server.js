@@ -16,7 +16,7 @@ let killsGame = "Game 1";
 let matchRankingGame = "Game 1";
 let commsAction = "show";
 let scrollQueue = [];
-let maxEliminatedTeams = 16;
+let maxEliminatedTeams = 18;
 
 // 🔥 COMMS STATE
 // Initialize totalCards with a default value, but allow it to be updated dynamically
