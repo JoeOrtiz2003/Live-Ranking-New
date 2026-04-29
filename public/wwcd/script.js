@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const lastRound = firstRow[5] ? firstRow[5].v : "N/A";
         const bgImageUrl = firstRow[6] ? firstRow[6].v : ""; // background image URL
 
-        const totalTeams = 18; // Assuming a fixed total number of teams
+        const totalTeams = 22; // Assuming a fixed total number of teams
         const showLogo = Boolean(teamLogoUrl);
 
         // Render main content inside #mockupWrapper

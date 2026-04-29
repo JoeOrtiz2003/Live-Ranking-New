@@ -2,12 +2,12 @@
   --mainWidth: min(90vw, 255px);
   --font: 'Oswald', sans-serif;
   --ranking-header-color: white;
-  --ranking-header-background-color: #3acbda;
+  --ranking-header-background-color: #ff0000;
   --ranking-element-color: white;
-  --ranking-uneven-background-color: #004b75;
-  --ranking-even-background-color: #3ca9c2;
+  --ranking-uneven-background-color: #c20000;
+  --ranking-even-background-color: #6d0000;
   --alive-background-color: #ffffff;
-  --lower-background-color: #3acbda;
+  --lower-background-color: #ff0000;
   --dead-background-color: #0e0d0d;
   --size-RankingElement: 37px;
   --font-size-RankingElement: 18px;

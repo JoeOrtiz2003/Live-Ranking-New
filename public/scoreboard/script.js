@@ -71,10 +71,10 @@ async function fetchAndDisplayData() {
           `;
 
           // Assign rows to left or right grouping based on rank
-          if (index < 9) {
-            leftGrouping.appendChild(teamBraket); // Ranks 1 to 8
-          } else if (index >= 9 && index < 18) {
-            rightGrouping.appendChild(teamBraket); // Ranks 9 to 16
+          if (index < 11) {
+            leftGrouping.appendChild(teamBraket); // Ranks 1 to 10
+          } else if (index >= 11 && index < 22) {
+            rightGrouping.appendChild(teamBraket); // Ranks 11 to 22
           }
         });
 
