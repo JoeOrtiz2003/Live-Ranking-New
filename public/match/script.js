@@ -1,10 +1,10 @@
 const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
 let sheetName = 'Game 1';
-const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC LIMIT 20';
+const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC LIMIT 16';
 
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
-  createRankingElements(22);
+  createRankingElements(16);
   updateSlogan(); // Set slogan on load
   fetchSheetData();
   setInterval(() => {
@@ -92,7 +92,7 @@ function fetchSheetData() {
       const wrapper = document.querySelector('.bracket-wrapper');
       wrapper.innerHTML = '';
 
-      sortedRows.slice(1, 22).forEach((row, index) => {
+      sortedRows.slice(1, 16).forEach((row, index) => {
         const teamName = getCellValue(row, 0);
         const place = getCellValue(row, 1);
         const kills = getCellValue(row, 2);
@@ -114,11 +114,11 @@ function fetchSheetData() {
     })
     .catch(err => {
       console.error('Sheet fetch error:', err.message);
-      createRankingElements(22);
+      createRankingElements(16);
     });
 }
 
-function createRankingElements(count = 22) {
+function createRankingElements(count = 16) {
   const wrapper = document.querySelector('.bracket-wrapper');
   wrapper.innerHTML = '';
 
