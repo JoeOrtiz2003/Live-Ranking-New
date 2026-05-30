@@ -1,13 +1,13 @@
 :root {
   --mainWidth: min(90vw, 255px);
   --font: 'Oswald', sans-serif;
-  --ranking-header-color: white;
-  --ranking-header-background-color: #d4ad35;
+  --ranking-header-color: rgb(255, 255, 255);
+  --ranking-header-background-color: #3ba0af;
   --ranking-element-color: white;
-  --ranking-uneven-background-color: #a59342;
-  --ranking-even-background-color: #53491d;
+  --ranking-uneven-background-color: #026776;
+  --ranking-even-background-color: #026776;
   --alive-background-color: #ffffff;
-  --lower-background-color: #d4ad35;
+  --lower-background-color: #3ba0af;
   --dead-background-color: #0e0d0d;
   --size-RankingElement: 37px;
   --font-size-RankingElement: 18px;
@@ -102,10 +102,10 @@ body {
 }
 
 .rankingHeader > p {
-  font-size: 18px;
+  font-size: 16px;
   margin: 0;
   text-align: center;
-  font-family: "Anton-Regular";
+  font-family: "Oswald-SemiBold";
 }
 
 #rankingHeaderRank,
