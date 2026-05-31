@@ -102,10 +102,10 @@ body {
 }
 
 .rankingHeader > p {
-  font-size: 16px;
+  font-size: 18px;
   margin: 0;
   text-align: center;
-  font-family: "Oswald-SemiBold";
+  font-family: "Anton-Regular";
 }
 
 #rankingHeaderRank,
