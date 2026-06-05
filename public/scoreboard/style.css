@@ -2,12 +2,12 @@
     --table-font: MonserratSemiBold;
     --secondary-font: MonserratRegular;
     --braket-header-color: white;
-    --braket-header-primary-color: #026776;
-    --braket-header-secondary-color: #026776;
+    --braket-header-primary-color: #b37b43;
+    --braket-header-secondary-color: #b37b43;
     --braket-primary-color: white;
     --braket-secondary-color: white;
-    --braket-odd-background-color: #00313a;
-    --braket-even-background-color: #00313a;
+    --braket-odd-background-color: #3b2a19;
+    --braket-even-background-color: #3b2a19;
     --svg-color: white; /* Color Chicken */
 }
 
@@ -81,7 +81,7 @@ body {
     height: auto;
     flex-direction: column;
     gap: 4px;
-    justify-content: center; /* Vertically align the content */
+    /*justify-content: center; /* Vertically align the content */
 }
 
 .braketHeader {

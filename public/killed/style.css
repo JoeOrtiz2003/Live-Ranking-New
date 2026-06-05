@@ -1,16 +1,16 @@
 :root {
-    --border-color: #49c5d7;
+    --border-color: #ddb685;
     --header-color: white;
     --header-font-family: "UI-Light", Arial, Helvetica, sans-serif;
     --header-text-shadow: 0 0 10px black;
-    --header-background-color: #3ba0af;
+    --header-background-color: #b37b43;
     --info-font-family: "UI-Bold", Arial, Helvetica, sans-serif;
     --team-color: white;
     --team-text-shadow: 0 0 10px black;
-    --team-background-color: #026776;
+    --team-background-color: #85582c;
     --kill-color: white;
     --kill-text-shadow: 0 0 10px black;
-    --kill-background-color: #00313a;
+    --kill-background-color: #3b2a19;
     --font: Norwester;
   }
   

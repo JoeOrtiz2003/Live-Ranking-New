@@ -2,12 +2,12 @@
   --mainWidth: min(90vw, 255px);
   --font: 'Oswald', sans-serif;
   --ranking-header-color: rgb(255, 255, 255);
-  --ranking-header-background-color: #3ba0af;
+  --ranking-header-background-color: #b37b43;
   --ranking-element-color: white;
-  --ranking-uneven-background-color: #026776;
-  --ranking-even-background-color: #026776;
+  --ranking-uneven-background-color: #3b2a19;
+  --ranking-even-background-color: #3b2a19;
   --alive-background-color: #ffffff;
-  --lower-background-color: #3ba0af;
+  --lower-background-color: #b37b43;
   --dead-background-color: #0e0d0d;
   --size-RankingElement: 37px;
   --font-size-RankingElement: 18px;
@@ -105,7 +105,7 @@ body {
   font-size: 16px;
   margin: 0;
   text-align: center;
-  font-family: "Anton-Regular";
+  font-family: "Oswald-SemiBold";
 }
 
 #rankingHeaderRank,
@@ -117,7 +117,7 @@ body {
 
 #rankingHeaderTeam,
 .rankingElementLogoWrapper {
-  flex: 0 0 90px;
+  flex: 0 0 85px;
 }
 
 #rankingHeaderAlive {
