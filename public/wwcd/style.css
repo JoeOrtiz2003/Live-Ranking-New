@@ -59,8 +59,8 @@ html, body {
 :root {
   --marquess-color: white;
   --marquees-border-color: white;
-  --marquess-background-color: #9d49b5;
-  --frame-background-color: #110913;
+  --marquess-background-color: #f3ba2e;
+  --frame-background-color: #333a3c;
   --frame-image-corner-color: white;
   --frame-image-text-color: white;
   --frame-stats-bigger-color: white;

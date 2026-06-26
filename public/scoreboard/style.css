@@ -2,12 +2,12 @@
     --table-font: MonserratSemiBold;
     --secondary-font: MonserratRegular;
     --braket-header-color: white;
-    --braket-header-primary-color: #9d49b5;
-    --braket-header-secondary-color: #9d49b5;
+    --braket-header-primary-color: #c59826;
+    --braket-header-secondary-color: #c59826;
     --braket-primary-color: white;
     --braket-secondary-color: white;
-    --braket-odd-background-color: #110913;
-    --braket-even-background-color: #110913;
+    --braket-odd-background-color: #333a3c;
+    --braket-even-background-color: #333a3c;
     --svg-color: white; /* Color Chicken */
 }
 
