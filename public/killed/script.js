@@ -2,7 +2,7 @@ const sheetID = "1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8";
 const sheetName = "INPUT";
 const showLogo = true;
 const fetchInterval = 1000; // in ms
-let MAX_ELIMINATED_TEAMS = 16;
+let MAX_ELIMINATED_TEAMS = 18;
 
 const lastAliveStatus = new Map();
 const shownEliminatedTags = new Set();
