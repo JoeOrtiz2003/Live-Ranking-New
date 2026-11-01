@@ -1,9 +1,10 @@
 let lastAction = null;
 
-setInterval(() => {
-  fetch("/api/control")
-    .then(res => res.json())
-    .then(command => {
+function startControlPolling() {
+  setInterval(async () => {
+    try {
+      const res = await fetch("/api/control");
+      const command = await res.json();
       if (command.action !== lastAction) {
         if (command.action === "hide") {
           animateColumns("hide");
@@ -12,20 +13,20 @@ setInterval(() => {
         }
         lastAction = command.action;
       }
-      // Handle scroll commands
       if (command.scrollDirection) {
         const event = new CustomEvent('scroll-command', { detail: { direction: command.scrollDirection } });
         document.dispatchEvent(event);
       }
-    })
-    .catch(error => console.error('Error fetching control state:', error));
-}, 1000);
+    } catch (error) {
+      console.error('Error fetching control state:', error);
+    }
+  }, 1000);
+}
 
 function animateColumns(direction) {
   const header = document.querySelector('.rankingHeader');
   const rows = Array.from(document.querySelectorAll('.rankingElement'));
-  const lower = document.querySelector('.lowerHeader');
-  const all = [header, ...rows, lower].filter(Boolean);
+  const all = [header, ...rows].filter(Boolean);
   const mainDiv = document.getElementById("mainDiv");
 
   // For "show", hide all before animating in
@@ -79,9 +80,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const mainDiv = document.getElementById("mainDiv");
   mainDiv.style.display = "flex";
 
-  createRankingElements(18);
+  createRankingElements(16);
   fetchRankingData();
   setInterval(fetchRankingData, 1000);
+  // Start polling control endpoint after DOM is ready to avoid null DOM access
+  startControlPolling();
 });
 
 const sheetID = "1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8";
@@ -91,7 +94,7 @@ const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=
 
 let previousRanks = {};
 
-function createRankingElements(count = 18) {
+function createRankingElements(count = 16) {
   const wrapper = document.getElementById("rankingElementsWrapper");
   wrapper.innerHTML = "";
 
@@ -157,20 +160,27 @@ function updateRankingElements(data) {
     const prevIndex = previousRanks[teamData.team];
 
     if (prevIndex !== undefined && index < prevIndex) {
+      console.debug('slide-up trigger:', { team: teamData.team, from: prevIndex, to: index, elementPosition: index + 1 });
+      // Remove existing class to allow retriggering, force reflow then add
+      element.classList.remove("slide-up");
+      // Force reflow to reset the animation
+      // eslint-disable-next-line no-unused-expressions
+      element.offsetWidth;
       element.classList.add("slide-up");
       element.addEventListener("animationend", () => {
         element.classList.remove("slide-up");
       }, { once: true });
     }
 
-    element.querySelector(".rankingElementRank").textContent = `#${teamData.rank}`;
+    element.querySelector(".rankingElementRank").textContent = teamData.rank;
     element.querySelector(".rankingElementName").textContent = teamData.team;
     element.querySelector(".rankingElementLogo").src = teamData.logo;
     element.querySelector(".rankingElementKills").textContent = teamData.elims;
 
     const aliveBoxes = element.querySelectorAll(".rankingElementAlive");
     aliveBoxes.forEach((box, i) => {
-      box.style.backgroundColor = i < teamData.alive ? "#ffffff" : "#0e0d0d";
+      const image = i < teamData.alive ? "alive.png" : "dead.png";
+      box.style.backgroundImage = `url("./image/${image}")`;
     });
 
     if (teamData.alive === 0) {

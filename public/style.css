@@ -10,7 +10,7 @@
   --lower-background-color: #8f0000;
   --dead-background-color: #333a3c;
   --size-RankingElement: 37px;
-  --font-size-RankingElement: 18px;
+  --font-size-RankingElement: 14px;
   --size-weighted-RankingElement: 510;
   --padding-right:1px;
 }
@@ -42,6 +42,21 @@
   font-weight: 400;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "Arame-Regular";
+  src: url("./fonts/Arame-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Arame-Bold";
+  src: url("./fonts/Arame-Bold.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
 
 html, body {
   height: 100%;
@@ -92,30 +107,43 @@ body {
 }
 
 .rankingHeader {
-  display: flex;
-  width: 100%;
-  background-color: var(--ranking-header-background-color);
-  color: var(--ranking-header-color);
-  padding: 8px 0;
-  -webkit-clip-path: polygon(24% 0, 88% 0, 100% 0, 100% 77%, 100% 100%, 0 100%, 0 80%, 0 30%, 7% 0) !important;
-  clip-path: polygon(24% 0, 88% 0, 100% 0, 100% 77%, 100% 100%, 0 100%, 0 80%, 0 30%, 7% 0) !important;
+display: flex;
+width: 100%;
+
+/* Background image */
+background-image: url("./image/UpperColumn.png");
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+
+color: var(--ranking-header-color);
+padding: 4px 0;
 }
 
 .rankingHeader > p {
-  font-size: 16px;
+  font-size: 13px;
   margin: 0;
   text-align: center;
-  font-family: "Oswald-SemiBold";
+  font-family: "Arame-Bold";
 }
 
-#rankingHeaderRank,
-.rankingElementRank {
+#rankingHeaderRank{
   flex: 0 0 35px;
   text-align: center;
   padding-left: 18px;
 }
 
-#rankingHeaderTeam,
+.rankingElementRank {
+  flex: 0 0 35px;
+  text-align: center;
+  padding-left: 1px;
+}
+
+#rankingHeaderTeam {
+  flex: 0 0 85px;
+  transform: translateX(10px);
+}
+
 .rankingElementLogoWrapper {
   flex: 0 0 85px;
 }
@@ -126,7 +154,7 @@ body {
 }
 
 .rankingElementAliveWrapper {
-  flex: 0 0 40px;
+  flex: 0 0 80px;
   justify-content: center;
 }
 
@@ -136,7 +164,7 @@ body {
 }
 
 .rankingElementKills {
-  flex: 0 0 70px;
+  flex: 0 0 35px;
   text-align: center;
 }
 
@@ -152,7 +180,7 @@ body {
   width: 100%;
   display: flex;
   align-items: center;
-  height: var(--size-RankingElement);              /* Increased height for bigger rows */
+  height: var(--size-RankingElement);
   margin: 0;
   padding: 0;
 }
@@ -163,7 +191,11 @@ body {
   left: 0;
   width: 100%;
   height: var(--size-RankingElement);              /* keep height in sync with rows */
-  background-color: var(--ranking-even-background-color);
+  /* Background image */
+  background-image: url("./image/TeamLayer.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   z-index: 0;
 
   /* apply the left-pointed polygon only to the background */
@@ -187,7 +219,6 @@ body {
 }
 
 .rankingElementRank,
-.rankingElementName,
 .rankingElementKills,
 .rankingElementPoints {       /* If you have .rankingElementPoints */
   font-size: var(--font-size-RankingElement);            /* Bigger text */
@@ -195,7 +226,17 @@ body {
   font-weight: var(--size-weighted-RankingElement);
   color: var(--ranking-element-color);
   margin: 0;
-  font-family: 'Oswald-SemiBold';
+  font-family: 'Arame-Bold';
+}
+
+.rankingElementName {       /* If you have .rankingElementPoints */
+  font-size: var(--font-size-RankingElement);            /* Bigger text */
+  line-height: var(--size-RankingElement);          /* Match new height */
+  font-weight: var(--size-weighted-RankingElement);
+  color: var(--ranking-element-color);
+  margin: 0;
+  font-family: 'Arame-Bold';
+  transform: translateX(15px);
 }
 
 .rankingElementWrapper > p {
@@ -207,7 +248,7 @@ body {
 .rankingElementLogoWrapper {
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  padding-left: 5px;
 }
 
 .rankingElementLogo {
@@ -220,14 +261,17 @@ body {
 .rankingElementAliveWrapper {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0;
 }
 
 .rankingElementAlive {
-  width: 5px;
+  flex: 0 0 10px;
+  width: 10px;
   height: 20px;
-  background-color: var(--alive-background-color);
-  border-radius: 25px;
+  margin: 0 -3px 0 0;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .rankingElement:nth-child(even) .rankingElementBackground {
@@ -247,45 +291,6 @@ body {
 .fadedTeam .rankingElementAlive {
   opacity: 0.4;
   filter: grayscale(100%);
-}
-
-.lowerHeader {
-  display: flex;
-  width: 100%;
-  background-color: var(--lower-background-color);
-  color: white;
-  padding: 8px 0;
-  justify-content: center;
-  align-items: center;
-}
-
-.lowerHeaderInner {
-  display: flex;
-  gap: 60px;
-}
-
-.lowerHeaderSection {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.statusIndicatorBox {
-  width: 8px;
-  height: 10px;
-  border: 1px solid var(--ranking-uneven-background-color);
-}
-
-.whiteBox {
-  background-color: var(--alive-background-color);
-}
-
-.blackBox {
-  background-color: var(--dead-background-color);
-}
-
-.statusIndicatorText {
-  margin: 0;
 }
 
 @keyframes slideUp {
