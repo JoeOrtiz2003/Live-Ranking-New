@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mainDiv = document.getElementById("mainDiv");
   mainDiv.style.display = "flex";
 
-  createRankingElements(16);
+  createRankingElements(18);
   fetchRankingData();
   setInterval(fetchRankingData, 1000);
   // Start polling control endpoint after DOM is ready to avoid null DOM access
@@ -94,7 +94,7 @@ const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=
 
 let previousRanks = {};
 
-function createRankingElements(count = 16) {
+function createRankingElements(count = 18) {
   const wrapper = document.getElementById("rankingElementsWrapper");
   wrapper.innerHTML = "";
 
